@@ -48,7 +48,7 @@ module.exports = app => {
   app.post('/api/category/new', (req, res) => {
     Category.findOne({ title: req.body.title }, (err, cat) => {
       if (cat) {
-        res.send({ message: 'You already have a category of that title.' });
+        res.send({ message: 'You already have a category of that title.', category: null });
       } else {
         const newCategory = new Category({
           title: req.body.title
@@ -56,9 +56,17 @@ module.exports = app => {
         newCategory.save((err, cat) => {
           if (err) { throw err };
           console.log('Saved!', cat);
+          res.send({ message: 'New category created!', category: cat })
         });
-        res.send({ message: "New category created!" });
       };
+    });
+  });
+
+  app.post('/api/category/delete/:catId', (req, res) => {
+    Category.findById({ _id: req.params.catId }, (err, cat) => {
+      console.log(cat);
+      res.send({ cat });
+      cat.remove();
     });
   });
 

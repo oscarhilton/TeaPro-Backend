@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import TeasList from './TeasList';
 import Categories from './Categories';
 
-class Teas extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props);
   }
@@ -19,4 +19,4 @@ class Teas extends Component {
   }
 }
 
-export default connect()(Teas);
+export default connect()(Dashboard);

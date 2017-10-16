@@ -1,5 +1,13 @@
 import axios from 'axios';
-import { FETCH_USER, GET_ALL_TEAS, GET_ALL_CATEGORIES, NEW_CATEGORY_TITLE_CHANGE, NEW_CATEGORY, NEW_TEA } from './types';
+import {
+  FETCH_USER,
+  GET_ALL_TEAS,
+  GET_ALL_CATEGORIES,
+  NEW_CATEGORY_TITLE_CHANGE,
+  NEW_CATEGORY,
+  NEW_TEA,
+  DELETE_CATEGORY
+} from './types';
 
 export const fetchUser = () => async dispatch => {
   const res = await axios.get('./api/current_user');
@@ -26,7 +34,8 @@ export const getAllCategories = () => async dispatch => {
   dispatch({ type: GET_ALL_CATEGORIES, payload: res.data.cats });
 };
 
-export const newCategory = (title) => async dispatch => {
+export const newCategory = (formValues) => async dispatch => {
+  const { title } = formValues;
   const res = await axios.post('/api/category/new', { title } );
 
   console.log(res.data);
@@ -37,10 +46,14 @@ export const newCategory = (title) => async dispatch => {
 export const newTea = (title, catId) => async dispatch => {
   const newTea = await axios.post('/api/teas/new', { title, catId } );
 
-  console.log(newTea);
-
   dispatch({ type: NEW_TEA, payload: { message: newTea.data.message, tea: newTea.data.tea } });
 };
+
+export const deleteCategory = (id) => async dispatch => {
+  const res = await axios.post('/api/category/delete/' + id);
+
+  dispatch({ type: DELETE_CATEGORY, payload: res.data });
+}
 
 export const getTeaCategory = (teaId) => async dispatch => {
   const teaCat = await axios.get('/api/teas/' + teaId + '/category');

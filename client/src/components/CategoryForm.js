@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { newCategoryTitleChange } from '../actions';
+import { newCategoryTitleChange, newCategory } from '../actions';
 
 class CategoryForm extends Component {
   handleTitleChange(text) {
@@ -10,7 +10,8 @@ class CategoryForm extends Component {
 
   handleCreateCategory(e) {
     e.preventDefault();
-    console.log('hello');
+    this.props.newCategory(this.props.categories.formValues);
+    this.props.newCategoryTitleChange('');
   }
 
   render() {
@@ -18,6 +19,7 @@ class CategoryForm extends Component {
       <form>
         <input
           placeholder="Category title"
+          value={this.props.categories.formValues.title}
           onChange={this.handleTitleChange.bind(this)}
         />
         <button
@@ -32,4 +34,8 @@ class CategoryForm extends Component {
   };
 };
 
-export default connect(null, { newCategoryTitleChange })(CategoryForm);
+const mapStateToProps = ({ categories }) => {
+  return { categories };
+}
+
+export default connect(mapStateToProps, { newCategoryTitleChange, newCategory })(CategoryForm);

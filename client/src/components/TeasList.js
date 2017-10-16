@@ -26,7 +26,7 @@ class TeasList extends Component {
 }
 
 function mapStateToProps({ teas }) {
-  return { teas: teas }
+  return { teas }
 }
 
 export default connect(mapStateToProps)(TeasList);
