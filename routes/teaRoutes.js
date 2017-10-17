@@ -17,6 +17,13 @@ module.exports = app => {
     });
   });
 
+  app.get('/api/category/:title', (req, res) => {
+    Category.findOne({ title: req.params.title }).populate('teas').exec( (err, cat) => {
+      console.log(cat);
+      res.send({ cat });
+    });
+  })
+
   app.post('/api/teas/new', (req, res) => {
     Tea.find({ title: req.body.title }, (err, tea) => {
       if (tea && tea.length > 0) {
@@ -33,12 +40,9 @@ module.exports = app => {
             newTea.save((err, tea) => {
               if (err) { throw err };
               console.log('Saved!', tea);
-            }).then((tea) => {
-              console.log('promise', tea);
-              tea.populate('category').exec((err, tea) => {
-                console.log('populate', tea)
-              })
-            });
+            })
+            cat.teas.push(newTea);
+            cat.save();
           })
         });
       }

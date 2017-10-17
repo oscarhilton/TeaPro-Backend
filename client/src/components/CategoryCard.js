@@ -13,7 +13,7 @@ class TeaCard extends Component {
     const { title } = this.props.category;
     return (
       <div>
-        <Link to={`/category/${ title.toLowerCase() }`}>
+        <Link to={`/category/${ title }`}>
           { title }
         </Link>
         <button

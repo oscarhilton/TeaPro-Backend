@@ -2,12 +2,14 @@ import {
   NEW_CATEGORY_TITLE_CHANGE,
   GET_ALL_CATEGORIES,
   NEW_CATEGORY,
-  DELETE_CATEGORY
+  DELETE_CATEGORY,
+  GET_CATEGORY_BY_NAME
 } from '../actions/types';
 
 const INITIAL_STATE = {
   formValues: { title: '' },
-  list: []
+  list: [],
+  selected: {}
 }
 
 export default function(state = INITIAL_STATE, action) {
@@ -18,6 +20,8 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, list: [...state.list, action.payload.category ]}
     case GET_ALL_CATEGORIES:
       return { ...state, list: action.payload  };
+    case GET_CATEGORY_BY_NAME:
+      return { ...state, selected: action.payload.cat };
     case DELETE_CATEGORY:
       let list = state.list;
       let category = action.payload.cat;

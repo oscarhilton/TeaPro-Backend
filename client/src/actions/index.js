@@ -6,7 +6,8 @@ import {
   NEW_CATEGORY_TITLE_CHANGE,
   NEW_CATEGORY,
   NEW_TEA,
-  DELETE_CATEGORY
+  DELETE_CATEGORY,
+  GET_CATEGORY_BY_NAME
 } from './types';
 
 export const fetchUser = () => async dispatch => {
@@ -32,6 +33,12 @@ export const getAllCategories = () => async dispatch => {
   const res = await axios.get('/api/category/all');
 
   dispatch({ type: GET_ALL_CATEGORIES, payload: res.data.cats });
+};
+
+export const getCategoryByName = (title) => async dispatch => {
+  const res = await axios.get('/api/category/' + title);
+
+  dispatch({ type: GET_CATEGORY_BY_NAME, payload: res.data });
 };
 
 export const newCategory = (formValues) => async dispatch => {
