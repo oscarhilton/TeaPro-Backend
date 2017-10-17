@@ -28,46 +28,46 @@ class TeaForm extends Component {
     const { title, description, origin, caffeine, steeptime } = this.props.categories.formValues.newTea;
     return (
       <form>
-      <input
-        placeholder="Tea title"
-        value={ title }
-        onChange={this.handleChange.bind(this, this.props.newTeaTitleChange)}
-      />
-      <br/>
-      <textarea
-        placeholder="Description"
-        value={ description }
-        onChange={this.handleChange.bind(this, this.props.newTeaDescriptionChange)}
-      />
-      <br/>
-      <input
-        placeholder="Origin"
-        value={ origin }
-        onChange={this.handleChange.bind(this, this.props.newTeaOriginChange)}
-      />
-      <br/>
-      <select
-        value={ caffeine }
-        onChange={this.handleChange.bind(this, this.props.newTeaCaffeineChange)}
-      >
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
-      </select>
-      <br/>
-      <input
-        placeholder="Steep Time"
-        value={ steeptime }
-        onChange={this.handleChange.bind(this, this.props.newTeaSteeptimeChange)}
-      />
-      <br/>
-      <button
-        type="submit"
-        className="btn btn-default"
-        onClick={this.handleCreateTea.bind(this)}
-      >
-      Create new tea
-      </button>
+        <input
+          placeholder="Tea title"
+          value={ title }
+          onChange={this.handleChange.bind(this, this.props.newTeaTitleChange)}
+        />
+        <br/>
+        <textarea
+          placeholder="Description"
+          value={ description }
+          onChange={this.handleChange.bind(this, this.props.newTeaDescriptionChange)}
+        />
+        <br/>
+        <input
+          placeholder="Origin"
+          value={ origin }
+          onChange={this.handleChange.bind(this, this.props.newTeaOriginChange)}
+        />
+        <br/>
+        <select
+          value={ caffeine }
+          onChange={this.handleChange.bind(this, this.props.newTeaCaffeineChange)}
+        >
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <br/>
+        <input
+          placeholder="Steep Time"
+          value={ steeptime }
+          onChange={this.handleChange.bind(this, this.props.newTeaSteeptimeChange)}
+        />
+        <br/>
+        <button
+          type="submit"
+          className="btn btn-default"
+          onClick={this.handleCreateTea.bind(this)}
+        >
+        Create new tea
+        </button>
       </form>
     );
   };

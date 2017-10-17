@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ListComponent } from './common';
 import TeaForm from './TeaForm';
+import EditCategoryForm from './EditCategoryForm';
 import { deleteCategory, getCategoryByName } from '../actions';
 
 class CategoryPage extends Component {
@@ -11,9 +12,16 @@ class CategoryPage extends Component {
   render() {
     const { title, teas } = this.props.categories.selected;
     return (
-      <div>
+      <div className="container">
         <h2>{title}</h2>
-        <TeaForm />
+        <div className="row">
+          <div className="col">
+            <EditCategoryForm />
+          </div>
+          <div className="col">
+            <TeaForm />
+          </div>
+        </div>
         <ListComponent data={teas} />
       </div>
     );

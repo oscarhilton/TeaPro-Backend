@@ -2,6 +2,7 @@ import {
   NEW_CATEGORY_TITLE_CHANGE,
   GET_ALL_CATEGORIES,
   NEW_CATEGORY,
+  EDIT_CATEGORY_BACKGROUND_CHANGE,
   NEW_TEA,
   DELETE_CATEGORY,
   GET_CATEGORY_BY_NAME,
@@ -18,6 +19,7 @@ const INITIAL_STATE = {
        title: ''
      },
      editCategory: {
+       background: ''
      },
      newTea: {
        title: '',
@@ -55,6 +57,17 @@ export default function(state = INITIAL_STATE, action) {
           action.payload.category
         ]
       }
+    case EDIT_CATEGORY_BACKGROUND_CHANGE:
+      return {
+        ...state,
+        formValues: {
+          ...state.formValues,
+          editCategory: {
+            ...state.formValues.editCategory,
+            background: action.payload
+          }
+        }
+      };
     case NEW_TEA_TITLE_CHANGE:
       return {
         ...state,

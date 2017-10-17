@@ -11,7 +11,7 @@ module.exports = app => {
   });
 
   app.get('/api/category/all', (req, res) => {
-    Category.find({}).populate('teas').exec((err, cats) => {
+    Category.find({}).populate({ path: 'teas', populate: { path: 'category' } }).exec((err, cats) => {
       if (err) { throw err };
       res.send({ cats });
     });
@@ -23,6 +23,20 @@ module.exports = app => {
       res.send({ cat });
     });
   })
+
+  app.post('/api/category/edit/:id', (req, res) => {
+    Category.findById({ _id: req.params.id }, (err, cat) => {
+      const { background } = req.body.editObj;
+      cat.set({
+        background
+      })
+      cat.save((err, updatedCat) => {
+        if (err) { throw err };
+        res.send(updatedCat);
+        console.log('updated!', updatedCat);
+      })
+    });
+  });
 
   app.post('/api/teas/new', (req, res) => {
     Tea.find({ title: req.body.tea.title }, (err, tea) => {

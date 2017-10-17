@@ -5,6 +5,8 @@ import {
   GET_ALL_CATEGORIES,
   NEW_CATEGORY_TITLE_CHANGE,
   NEW_CATEGORY,
+  EDIT_CATEGORY_BACKGROUND_CHANGE,
+  EDIT_CATEGORY,
   NEW_TEA_TITLE_CHANGE,
   NEW_TEA_DESCRIPTION_CHANGE,
   NEW_TEA_ORIGIN_CHANGE,
@@ -61,6 +63,19 @@ export const newTeaSteeptimeChange = text => {
     type: NEW_TEA_STEEPTIME_CHANGE,
     payload: text
   };
+};
+
+export const editCategoryBackgroundChange = text => {
+  return {
+    type: EDIT_CATEGORY_BACKGROUND_CHANGE,
+    payload: text
+  };
+};
+
+export const editCategory = (catId, editObj) => async dispatch => {
+  const res = await axios.post('/api/category/edit/' + catId, { editObj } );
+
+  dispatch({ type: EDIT_CATEGORY, payload: res.data });
 };
 
 export const getAllTeas = () => async dispatch => {

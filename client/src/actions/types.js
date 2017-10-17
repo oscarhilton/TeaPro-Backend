@@ -1,11 +1,13 @@
 export const FETCH_USER = 'fetch_user';
 export const GET_ALL_TEAS = 'get_all_teas';
 export const GET_ALL_CATEGORIES = 'get_all_categories';
-export const NEW_TEA = 'new_tea';
 export const NEW_CATEGORY_TITLE_CHANGE = 'new_category_title_change';
 export const NEW_CATEGORY = 'new_category';
+export const EDIT_CATEGORY = 'edit_category';
+export const EDIT_CATEGORY_BACKGROUND_CHANGE = 'edit_category_background_change';
 export const DELETE_CATEGORY = 'delete_category';
 export const GET_CATEGORY_BY_NAME = 'get_category_by_name';
+export const NEW_TEA = 'new_tea';
 export const NEW_TEA_TITLE_CHANGE = 'new_tea_title_change';
 export const NEW_TEA_DESCRIPTION_CHANGE = 'new_tea_description_change';
 export const NEW_TEA_ORIGIN_CHANGE = 'new_tea_origin_change';
