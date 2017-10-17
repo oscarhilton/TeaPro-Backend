@@ -53,19 +53,14 @@ export const newCategory = (formValues) => async dispatch => {
   const { title } = formValues;
   const res = await axios.post('/api/category/new', { title } );
 
-  console.log(res.data);
-
   dispatch({ type: NEW_CATEGORY, payload: res.data });
 };
 
 export const newTea = (tea, catId) => async dispatch => {
-  console.log(tea);
-  
   const res = await axios.post('/api/teas/new', { tea, catId } );
+  const { message, newTea } = res.data;
 
-  const { message, tea } = res.data;
-
-  dispatch({ type: NEW_TEA, payload: { message, tea } });
+  dispatch({ type: NEW_TEA, payload: { message, newTea } });
 };
 
 export const deleteCategory = (id) => async dispatch => {

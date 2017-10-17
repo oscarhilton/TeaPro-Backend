@@ -13,13 +13,12 @@ class TeaForm extends Component {
     e.preventDefault();
     const newTea = this.props.categories.formValues.newTea;
     const catId = this.props.categories.selected._id;
-    console.log('newTea', newTea);
+
     this.props.newTea(newTea, catId);
     this.props.newTeaTitleChange('');
   }
 
   render() {
-    console.log(this.props.categories.formValues);
     return (
       <form>
       <input

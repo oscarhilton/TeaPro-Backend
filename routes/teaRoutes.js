@@ -31,6 +31,7 @@ module.exports = app => {
       } else {
         Category.findById( req.body.catId, (err, cat) => {
           if (err) { throw err };
+          console.log(cat);
           cat.save((err) => {
             if (err) { throw err };
             const newTea = new Tea({
@@ -40,7 +41,7 @@ module.exports = app => {
             newTea.save((err, tea) => {
               if (err) { throw err };
               console.log('Saved!', tea);
-              res.send({ message: 'New tea added', tea });
+              res.send({ message: 'New tea added', newTea: tea });
             });
             cat.teas.push(newTea);
             cat.save();
