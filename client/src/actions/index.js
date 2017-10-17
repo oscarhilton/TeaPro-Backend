@@ -5,6 +5,7 @@ import {
   GET_ALL_CATEGORIES,
   NEW_CATEGORY_TITLE_CHANGE,
   NEW_CATEGORY,
+  NEW_TEA_TITLE_CHANGE,
   NEW_TEA,
   DELETE_CATEGORY,
   GET_CATEGORY_BY_NAME
@@ -19,6 +20,13 @@ export const fetchUser = () => async dispatch => {
 export const newCategoryTitleChange = (text) => {
   return {
     type: NEW_CATEGORY_TITLE_CHANGE,
+    payload: text
+  }
+}
+
+export const newTeaTitleChange = (text) => {
+  return {
+    type: NEW_TEA_TITLE_CHANGE,
     payload: text
   }
 }
@@ -50,10 +58,14 @@ export const newCategory = (formValues) => async dispatch => {
   dispatch({ type: NEW_CATEGORY, payload: res.data });
 };
 
-export const newTea = (title, catId) => async dispatch => {
-  const newTea = await axios.post('/api/teas/new', { title, catId } );
+export const newTea = (tea, catId) => async dispatch => {
+  console.log(tea);
+  
+  const res = await axios.post('/api/teas/new', { tea, catId } );
 
-  dispatch({ type: NEW_TEA, payload: { message: newTea.data.message, tea: newTea.data.tea } });
+  const { message, tea } = res.data;
+
+  dispatch({ type: NEW_TEA, payload: { message, tea } });
 };
 
 export const deleteCategory = (id) => async dispatch => {

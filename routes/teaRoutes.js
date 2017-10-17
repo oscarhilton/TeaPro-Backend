@@ -25,22 +25,23 @@ module.exports = app => {
   })
 
   app.post('/api/teas/new', (req, res) => {
-    Tea.find({ title: req.body.title }, (err, tea) => {
+    Tea.find({ title: req.body.tea.title }, (err, tea) => {
       if (tea && tea.length > 0) {
-        return;
+        res.send({ message: 'Already have a tea of that name!' });
       } else {
         Category.findById( req.body.catId, (err, cat) => {
           if (err) { throw err };
           cat.save((err) => {
             if (err) { throw err };
             const newTea = new Tea({
-              title: req.body.title,
+              title: req.body.tea.title,
               category: cat._id
             });
             newTea.save((err, tea) => {
               if (err) { throw err };
               console.log('Saved!', tea);
-            })
+              res.send({ message: 'New tea added', tea });
+            });
             cat.teas.push(newTea);
             cat.save();
           })

@@ -5,7 +5,7 @@ const TeaCard = ({ tea }) => {
     <div className="Tea">
       <div className="tea_title">
         <span>
-          {tea.title} ({tea.category.title})
+          {tea.title}
         </span>
       </div>
       <div className="tea_score">

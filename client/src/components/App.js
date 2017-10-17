@@ -14,7 +14,7 @@ class App extends Component {
     this.props.fetchUser();
     this.props.getAllTeas();
     this.props.getAllCategories();
-    // this.props.newTea('Test3', '59e4d6d543bb3f6add4a8f4b');
+    // this.props.newTea('fhsdhfdshjfh', '59e4d6d543bb3f6add4a8f4b');
     // this.props.newTea('Blablabla', '59e4d32043bb3f6add4a8f4a');
   }
   render() {

@@ -4,7 +4,6 @@ import CategoryCard from './CategoryCard';
 
 class List extends Component {
   render() {
-    console.log(this.props)
     return (
       <ul>
         {Object.values(this.props.categories.list).map(category =>

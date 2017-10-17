@@ -4,13 +4,12 @@ import { newCategoryTitleChange, newCategory } from '../actions';
 
 class CategoryForm extends Component {
   handleTitleChange(text) {
-    console.log(text.target.value);
     this.props.newCategoryTitleChange(text.target.value);
   }
 
   handleCreateCategory(e) {
     e.preventDefault();
-    this.props.newCategory(this.props.categories.formValues);
+    this.props.newCategory(this.props.categories.formValues.newCategory);
     this.props.newCategoryTitleChange('');
   }
 
@@ -19,7 +18,7 @@ class CategoryForm extends Component {
       <form>
         <input
           placeholder="Category title"
-          value={this.props.categories.formValues.title}
+          value={this.props.categories.formValues.newCategory.title}
           onChange={this.handleTitleChange.bind(this)}
         />
         <button

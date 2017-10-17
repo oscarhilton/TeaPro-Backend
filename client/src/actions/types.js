@@ -6,3 +6,4 @@ export const NEW_CATEGORY_TITLE_CHANGE = 'new_category_title_change';
 export const NEW_CATEGORY = 'new_category';
 export const DELETE_CATEGORY = 'delete_category';
 export const GET_CATEGORY_BY_NAME = 'get_category_by_name';
+export const NEW_TEA_TITLE_CHANGE = 'new_tea_title_change';
