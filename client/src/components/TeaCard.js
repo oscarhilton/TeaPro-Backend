@@ -13,6 +13,11 @@ const TeaCard = ({ tea }) => {
           {tea.score}
         </span>
       </div>
+      <div className="tea_description">
+        <span>
+          {tea.description}
+        </span>
+      </div>
     </div>
   );
 };

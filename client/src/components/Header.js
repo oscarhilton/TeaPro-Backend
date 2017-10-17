@@ -10,17 +10,18 @@ class Header extends Component {
         return <a href="/auth/google">Login with google</a>;
       default:
         return (
-          <p>
+          <span className="text-primary">
             Hello {this.props.auth.firstName}. <a href="/api/logout">Logout</a>
-          </p>
+          </span>
         );
     }
   }
   render() {
     return (
-      <div>
-        Header component. {this.renderContent()}
-      </div>
+      <nav className="navbar navbar-inverse bg-inverse text-white">
+        <h2 className="text-white">TeaPro backend</h2>
+        {this.renderContent()}
+      </nav>
     );
   }
 }

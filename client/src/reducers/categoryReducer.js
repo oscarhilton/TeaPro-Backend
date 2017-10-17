@@ -5,7 +5,11 @@ import {
   NEW_TEA,
   DELETE_CATEGORY,
   GET_CATEGORY_BY_NAME,
-  NEW_TEA_TITLE_CHANGE
+  NEW_TEA_TITLE_CHANGE,
+  NEW_TEA_DESCRIPTION_CHANGE,
+  NEW_TEA_ORIGIN_CHANGE,
+  NEW_TEA_CAFFEINE_CHANGE,
+  NEW_TEA_STEEPTIME_CHANGE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -16,7 +20,11 @@ const INITIAL_STATE = {
      editCategory: {
      },
      newTea: {
-       title: ''
+       title: '',
+       description: '',
+       origin: '',
+       caffeine: 'high',
+       steeptime: ''
      }
    },
   list: [],
@@ -32,7 +40,9 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         formValues: {
+          ...state.formValues,
           newCategory: {
+            ...state.formValues.newCategory,
             title: action.payload
           }
         }
@@ -53,6 +63,50 @@ export default function(state = INITIAL_STATE, action) {
           newTea: {
             ...state.formValues.newTea,
             title: action.payload
+          }
+        }
+      };
+    case NEW_TEA_DESCRIPTION_CHANGE:
+      return {
+        ...state,
+        formValues: {
+          ...state.formValues,
+          newTea: {
+            ...state.formValues.newTea,
+            description: action.payload
+          }
+        }
+      };
+    case NEW_TEA_ORIGIN_CHANGE:
+      return {
+        ...state,
+        formValues: {
+          ...state.formValues,
+          newTea: {
+            ...state.formValues.newTea,
+            origin: action.payload
+          }
+        }
+      };
+    case NEW_TEA_CAFFEINE_CHANGE:
+      return {
+        ...state,
+        formValues: {
+          ...state.formValues,
+          newTea: {
+            ...state.formValues.newTea,
+            caffeine: action.payload
+          }
+        }
+      };
+    case NEW_TEA_STEEPTIME_CHANGE:
+      return {
+        ...state,
+        formValues: {
+          ...state.formValues,
+          newTea: {
+            ...state.formValues.newTea,
+            steeptime: action.payload
           }
         }
       };

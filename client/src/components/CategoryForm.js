@@ -9,8 +9,10 @@ class CategoryForm extends Component {
 
   handleCreateCategory(e) {
     e.preventDefault();
-    this.props.newCategory(this.props.categories.formValues.newCategory);
-    this.props.newCategoryTitleChange('');
+    if (this.props.categories.formValues.newCategory.title.length > 0) {
+      this.props.newCategory(this.props.categories.formValues.newCategory);
+      this.props.newCategoryTitleChange('');
+    }
   }
 
   render() {

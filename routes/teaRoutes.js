@@ -36,6 +36,10 @@ module.exports = app => {
             if (err) { throw err };
             const newTea = new Tea({
               title: req.body.tea.title,
+              description: req.body.tea.description,
+              origin: req.body.tea.origin,
+              caffeine: req.body.tea.caffeine,
+              steeptime: req.body.tea.steeptime,
               category: cat._id
             });
             newTea.save((err, tea) => {

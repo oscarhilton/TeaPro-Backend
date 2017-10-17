@@ -6,6 +6,10 @@ import {
   NEW_CATEGORY_TITLE_CHANGE,
   NEW_CATEGORY,
   NEW_TEA_TITLE_CHANGE,
+  NEW_TEA_DESCRIPTION_CHANGE,
+  NEW_TEA_ORIGIN_CHANGE,
+  NEW_TEA_CAFFEINE_CHANGE,
+  NEW_TEA_STEEPTIME_CHANGE,
   NEW_TEA,
   DELETE_CATEGORY,
   GET_CATEGORY_BY_NAME
@@ -17,19 +21,47 @@ export const fetchUser = () => async dispatch => {
   dispatch({ type: FETCH_USER, payload: res.data });
 };
 
-export const newCategoryTitleChange = (text) => {
+export const newCategoryTitleChange = text => {
   return {
     type: NEW_CATEGORY_TITLE_CHANGE,
     payload: text
-  }
-}
+  };
+};
 
-export const newTeaTitleChange = (text) => {
+export const newTeaTitleChange = text => {
   return {
     type: NEW_TEA_TITLE_CHANGE,
     payload: text
-  }
-}
+  };
+};
+
+export const newTeaDescriptionChange = text => {
+  return {
+    type: NEW_TEA_DESCRIPTION_CHANGE,
+    payload: text
+  };
+};
+
+export const newTeaOriginChange = text => {
+  return {
+    type: NEW_TEA_ORIGIN_CHANGE,
+    payload: text
+  };
+};
+
+export const newTeaCaffeineChange = text => {
+  return {
+    type: NEW_TEA_CAFFEINE_CHANGE,
+    payload: text
+  };
+};
+
+export const newTeaSteeptimeChange = text => {
+  return {
+    type: NEW_TEA_STEEPTIME_CHANGE,
+    payload: text
+  };
+};
 
 export const getAllTeas = () => async dispatch => {
   const res = await axios.get('/api/teas/all');
