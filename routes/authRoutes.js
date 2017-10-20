@@ -12,6 +12,7 @@ module.exports = app => {
     '/auth/google/callback',
     passport.authenticate('google'),
     (req, res) => {
+      res.send('hello');
       res.redirect('/teas');
     }
   );
@@ -25,3 +26,9 @@ module.exports = app => {
     res.send(req.user);
   });
 };
+
+// app.post('/login',
+//   passport.authenticate('local', { failureRedirect: '/login' }),
+//   function(req, res) {
+//     res.redirect('/');
+//   });

@@ -75,7 +75,8 @@ module.exports = app => {
         res.send({ message: 'You already have a category of that title.', category: null });
       } else {
         const newCategory = new Category({
-          title: req.body.title
+          title: req.body.title,
+          background: '#212121'
         })
         newCategory.save((err, cat) => {
           if (err) { throw err };

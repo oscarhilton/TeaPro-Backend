@@ -16,6 +16,7 @@
   "author": "Oscar Hilton",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
     "concurrently": "^3.5.0",
     "cookie-session": "^2.0.0-beta.2",
@@ -23,6 +24,7 @@
     "mongoose": "^4.11.4",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
-    "passport-google-oauth20": "^1.0.0"
+    "passport-google-oauth20": "^1.0.0",
+    "passport-local": "^1.0.0"
   }
 }

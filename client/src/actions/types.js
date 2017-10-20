@@ -1,4 +1,6 @@
 export const FETCH_USER = 'fetch_user';
+export const CHANGE_LOGIN_USERNAME_CHANGE = 'change_login_username_change';
+export const CHANGE_LOGIN_PASSWORD_CHANGE = 'change_login_password_change';
 export const GET_ALL_TEAS = 'get_all_teas';
 export const GET_ALL_CATEGORIES = 'get_all_categories';
 export const NEW_CATEGORY_TITLE_CHANGE = 'new_category_title_change';
