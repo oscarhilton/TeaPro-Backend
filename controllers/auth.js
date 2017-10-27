@@ -1,7 +1,9 @@
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import GoogleStrategy from 'passport-google-oauth20';
-import User from '../models/User';
+import mongoose from 'mongoose';
+
+const User = mongoose.model('User');
 // Import Facebook and Google OAuth apps configs
 import { facebook, google } from '../config/keys';
 
@@ -35,7 +37,9 @@ passport.use(new GoogleStrategy(google,
 ));
 
 const createOrGetUserFromDatabase = async (userProfile) => {
+  console.log(userProfile);
   let user = await User.findOne({ 'oauth_id': userProfile.oauth_id }).exec();
+  console.log(user);
   if (!user) {
     user = new User({
       oauth_id: userProfile.oauth_id,

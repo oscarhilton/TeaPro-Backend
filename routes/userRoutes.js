@@ -32,7 +32,9 @@ module.exports = app => {
       }
     }).exec( (err, user) => {
       if (err) { throw err };
-      res.send(user.cupboard);
+      if( user ){
+        res.send(user.cupboard);
+      }
     });
   });
 }
