@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 const User = mongoose.model('User');
 // Import Facebook and Google OAuth apps configs
-import { facebook, google } from '../config/keys';
+const keys = require('./config/keys');
 
 // Transform Facebook profile because Facebook and Google profile objects look different
 // and we want to transform them into user objects that have the same set of attributes
@@ -23,7 +23,7 @@ const transformGoogleProfile = (profile) => ({
 });
 
 // Register Facebook Passport strategy
-passport.use(new FacebookStrategy(facebook,
+passport.use(new FacebookStrategy(keys.facebook,
   // Gets called when user authorizes access to their profile
   async (accessToken, refreshToken, profile, done)
     // Return done callback and pass transformed user object
@@ -31,15 +31,13 @@ passport.use(new FacebookStrategy(facebook,
 ));
 
 // Register Google Passport strategy
-passport.use(new GoogleStrategy(google,
+passport.use(new GoogleStrategy(keys.google,
   async (accessToken, refreshToken, profile, done)
     => done(null, await createOrGetUserFromDatabase(transformGoogleProfile(profile._json)))
 ));
 
 const createOrGetUserFromDatabase = async (userProfile) => {
-  console.log(userProfile);
   let user = await User.findOne({ 'oauth_id': userProfile.oauth_id }).exec();
-  console.log(user);
   if (!user) {
     user = new User({
       oauth_id: userProfile.oauth_id,

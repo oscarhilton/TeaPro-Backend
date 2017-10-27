@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-import { mongoURI, cookieKey } from './config/keys';
+const keys = require('./config/keys');
 require('./models/User');
 require('./models/Tea');
 require('./models/Category');
 require('./services/passport');
 
-mongoose.connect(mongoURI);
+mongoose.connect(keys.mongoURI);
 
 const app = express();
 
@@ -18,7 +18,7 @@ const populate = require('./populate');
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: [cookieKey]
+    keys: [keys.cookieKey]
   })
 );
 app.use(passport.initialize());
