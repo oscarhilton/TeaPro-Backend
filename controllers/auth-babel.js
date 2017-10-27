@@ -27,7 +27,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 var User = _mongoose2.default.model('User');
 // Import Facebook and Google OAuth apps configs
-var keys = require('./config/keys');
+var keys = require('../config/keys');
 
 // Transform Facebook profile because Facebook and Google profile objects look different
 // and we want to transform them into user objects that have the same set of attributes
