@@ -1,14 +1,12 @@
-import passport from 'passport';
-import FacebookStrategy from 'passport-facebook';
-import GoogleStrategy from 'passport-google-oauth20';
-import mongoose from 'mongoose';
+const passport = require('passport');
+const FacebookStrategy = require('passport-facebook');
+const GoogleStrategy = require('passport-google-oauth20');
+const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
 // Import Facebook and Google OAuth apps configs
-const keys = require('./config/keys');
+const keys = require('../config/keys');
 
-// Transform Facebook profile because Facebook and Google profile objects look different
-// and we want to transform them into user objects that have the same set of attributes
 const transformFacebookProfile = (profile) => ({
   oauth_id: profile.id,
   name: profile.name,
@@ -55,15 +53,20 @@ passport.serializeUser((user, done) => done(null, user));
 // Deserialize user from the sessions
 passport.deserializeUser((user, done) => done(null, user));
 
-// Facebook
-export const facebookLogin = passport.authenticate('facebook');
-export const facebookMiddleware = passport.authenticate('facebook', { failureRedirect: '/auth/facebook' });
-
-// Google
-export const googleLogin = passport.authenticate('google', { scope: ['profile'] });
-export const googleMiddleware = passport.authenticate('google', { failureRedirect: '/auth/google' });
-
-// Callback
-export const oauthCallback = async (req, res) => {
-  res.redirect('OAuthLogin://login?user=' + JSON.stringify(req.user));
-};
+module.exports = {
+  facebookLogin: function() {
+    passport.authenticate('facebook');
+  },
+  facebookMiddleware: function() {
+    passport.authenticate('facebook', { failureRedirect: '/auth/facebook' });
+  },
+  googleLogin: function() {
+    googleLogin = passport.authenticate('google', { scope: ['profile'] });
+  },
+  googleMiddleware: function() {
+    googleMiddleware = passport.authenticate('google', { failureRedirect: '/auth/google' });
+  },
+  oauthCallback: async function(req, res) {
+    res.redirect('OAuthLogin://login?user=' + JSON.stringify(req.user));
+  }
+}

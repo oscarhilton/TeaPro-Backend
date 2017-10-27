@@ -1,12 +1,12 @@
 const passport = require('passport');
-var _auth = require('../controllers/auth-babel');
+var auth = require('../controllers/auth');
 
 module.exports = app => {
   // Set up auth routes
-  app.get('/auth/facebook', facebookLogin);
-  app.get('/auth/google', googleLogin);
-  app.get('/auth/facebook/callback', facebookMiddleware, oauthCallback);
-  app.get('/auth/google/callback', googleMiddleware, oauthCallback);
+  app.get('/auth/facebook', auth.facebookLogin);
+  app.get('/auth/google', auth.googleLogin);
+  app.get('/auth/facebook/callback', auth.facebookMiddleware, auth.oauthCallback);
+  app.get('/auth/google/callback', auth.googleMiddleware, auth.oauthCallback);
 
   app.get('/api/logout', (req, res) => {
     req.logout();
