@@ -1,4 +1,4 @@
-import passport from 'passport';
+const passport = require('passport');
 import {
   facebookLogin,
   facebookMiddleware,
