@@ -1,11 +1,5 @@
 const passport = require('passport');
-import {
-  facebookLogin,
-  facebookMiddleware,
-  googleLogin,
-  googleMiddleware,
-  oauthCallback,
-} from '../controllers/auth';
+var _auth = require('../controllers/auth-babel');
 
 module.exports = app => {
   // Set up auth routes
