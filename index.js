@@ -1,15 +1,15 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cookieSession = require('cookie-session');
-const passport = require('passport');
-const bodyParser = require('body-parser');
-const keys = require('./config/keys');
+import express from 'express';
+import mongoose from 'mongoose';
+import cookieSession from 'cookie-session';
+import passport from 'passport';
+import bodyParser from 'body-parser';
+import { mongoURI, cookieKey } from './config/keys';
 require('./models/User');
 require('./models/Tea');
 require('./models/Category');
 require('./services/passport');
 
-mongoose.connect(keys.mongoURI);
+mongoose.connect(mongoURI);
 
 const app = express();
 
@@ -18,7 +18,7 @@ const populate = require('./populate');
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: [keys.cookieKey]
+    keys: [cookieKey]
   })
 );
 app.use(passport.initialize());
@@ -27,6 +27,7 @@ app.use(bodyParser.json());
 
 require('./routes/authRoutes')(app);
 require('./routes/teaRoutes')(app);
+require('./routes/userRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));

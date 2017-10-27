@@ -1,20 +1,18 @@
-const passport = require('passport');
+import passport from 'passport';
+import {
+  facebookLogin,
+  facebookMiddleware,
+  googleLogin,
+  googleMiddleware,
+  oauthCallback,
+} from '../controllers/auth';
 
 module.exports = app => {
-  app.get(
-    '/auth/google',
-    passport.authenticate('google', {
-      scope: ['profile', 'email']
-    })
-  );
-
-  app.get(
-    '/auth/google/callback',
-    passport.authenticate('google'),
-    (req, res) => {
-      res.redirect('OAuthLogin://login?user=' + JSON.stringify(req.user));
-    }
-  );
+  // Set up auth routes
+  app.get('/auth/facebook', facebookLogin);
+  app.get('/auth/google', googleLogin);
+  app.get('/auth/facebook/callback', facebookMiddleware, oauthCallback);
+  app.get('/auth/google/callback', googleMiddleware, oauthCallback);
 
   app.get('/api/logout', (req, res) => {
     req.logout();
@@ -25,9 +23,3 @@ module.exports = app => {
     res.send(req.user);
   });
 };
-
-// app.post('/login',
-//   passport.authenticate('local', { failureRedirect: '/login' }),
-//   function(req, res) {
-//     res.redirect('/');
-//   });

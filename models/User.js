@@ -5,13 +5,16 @@ const { Schema } = mongoose;
 const SALT_ROUNDS = 10;
 
 const userSchema = new Schema({
-  googleId: String,
+  oauth_id: {
+    type: String,
+    unique: true,
+    index: true,
+  },
   firstName: String,
   lastName: String,
   gender: String,
-  profileImage: String,
-  username: String,
-  password: String
+  avatar: String,
+  cupboard: [{ type: Schema.Types.ObjectId, ref: 'Tea' }]
 });
 
 userSchema.pre("save", function(next) {
@@ -36,4 +39,4 @@ userSchema.pre("save", function(next) {
     });
 });
 
-mongoose.model('users', userSchema);
+mongoose.model('User', userSchema);

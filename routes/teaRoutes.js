@@ -11,7 +11,13 @@ module.exports = app => {
   });
 
   app.get('/api/category/all', (req, res) => {
-    Category.find({}).populate({ path: 'teas', populate: { path: 'category' } }).exec((err, cats) => {
+    Category.find({}).populate({
+       path: 'teas',
+       populate: {
+         path: 'category',
+         select: 'background'
+       }
+     }).exec((err, cats) => {
       if (err) { throw err };
       res.send({ cats });
     });
@@ -96,7 +102,7 @@ module.exports = app => {
   });
 
   app.get('/api/teas/:teaId/category', (req, res) => {
-    Tea.findOne({ _id: req.params.teaId }).populate('category').exec( (err, tea) => {
+    Tea.findOne({ _id: req.params.teaId }).populate('category', 'background').exec( (err, tea) => {
       if (err) { throw err };
       console.log('TEA CATEGORY: ', tea, 'END');
       res.send({ category: tea.category.title });
