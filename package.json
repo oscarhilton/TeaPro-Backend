@@ -8,7 +8,7 @@
     "npm": "5.0.3"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node_modules/nodemon/bin/nodemon.js -- node_modules/babel-cli/bin/babel-node.js index.js",
     "server": "node_modules/nodemon/bin/nodemon.js -- node_modules/babel-cli/bin/babel-node.js index.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
