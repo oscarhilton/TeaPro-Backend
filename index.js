@@ -1,8 +1,8 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cookieSession from 'cookie-session';
-import passport from 'passport';
-import bodyParser from 'body-parser';
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+const bodyParser = require('body-parser');
 import { mongoURI, cookieKey } from './config/keys';
 require('./models/User');
 require('./models/Tea');
