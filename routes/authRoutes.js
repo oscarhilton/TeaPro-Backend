@@ -9,6 +9,7 @@ module.exports = app => {
   app.get('/auth/facebook/callback',
           passport.authenticate('facebook'),
           (req, res) => {
+            console.log(req, res);
             res.redirect('OAuthLogin://login?user=' + JSON.stringify(req.user));
           }),
 
