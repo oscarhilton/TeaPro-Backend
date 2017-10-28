@@ -44,7 +44,7 @@ passport.use(
    {
      clientID: keys.facebook.clientID,
      clientSecret: keys.facebook.clientSecret,
-     callbackURL: '/auth/google/callback',
+     callbackURL: '/auth/facebook/callback',
      proxy: true
    },
    async (accessToken, refreshToken, profile, done) => {
