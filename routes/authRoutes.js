@@ -10,6 +10,7 @@ module.exports = app => {
           passport.authenticate('facebook'),
           (req, res) => {
             console.log(req, res);
+            res.redirect('/teas');
             res.redirect('OAuthLogin://login?user=' + JSON.stringify(req.user));
           }),
 
@@ -19,6 +20,7 @@ module.exports = app => {
   app.get('/auth/google/callback',
           passport.authenticate('google'),
           (req, res) => {
+            res.redirect('/teas');
             res.redirect('OAuthLogin://login?user=' + JSON.stringify(req.user));
           }),
 
