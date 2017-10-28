@@ -1,12 +1,25 @@
 const passport = require('passport');
-var auth = require('../controllers/auth');
+var auth = require('../services/passport');
 
 module.exports = app => {
   // Set up auth routes
-  app.get('/auth/facebook', auth.facebookLogin);
-  app.get('/auth/google', auth.googleLogin);
-  app.get('/auth/facebook/callback', auth.facebookMiddleware, auth.oauthCallback);
-  app.get('/auth/google/callback', auth.googleMiddleware, auth.oauthCallback);
+  app.get('/auth/facebook',
+          passport.authenticate('facebook'));
+
+  app.get('/auth/facebook/callback',
+          passport.authenticate('facebook'),
+          (req, res) => {
+            res.redirect('OAuthLogin://login?user=' + JSON.stringify(req.user));
+          }),
+
+  app.get('/auth/google',
+          passport.authenticate('google', { scope: ['profile'] }));
+
+  app.get('/auth/google/callback',
+          passport.authenticate('google'),
+          (req, res) => {
+            res.redirect('OAuthLogin://login?user=' + JSON.stringify(req.user));
+          }),
 
   app.get('/api/logout', (req, res) => {
     req.logout();

@@ -37,4 +37,39 @@ module.exports = app => {
       }
     });
   });
+
+  app.post('/api/user/wishlist/add', (req, res) => {
+    User.findOne({ _id: req.body.userId }, (err, user) => {
+      if (err) { throw err };
+      if (user) {
+        console.log(user.wishlist.indexOf(req.body.teaId));
+        if (user.wishlist.indexOf(req.body.teaId) > -1) {
+          res.send('Already got one');
+          console.log('Already got one');
+        } else {
+          Tea.findOne({ _id: req.body.teaId }, (err, tea) => {
+            if (err) { throw err };
+            user.wishlist.push(tea);
+            user.save();
+            console.log("saved", user);
+          });
+        }
+      };
+    })
+  });
+
+  app.post('/api/user/wishlist/get', (req, res) => {
+    User.findOne({ _id: req.body.userId }).populate({
+      path: 'wishlist',
+      populate: {
+        path: 'category',
+        select: 'background'
+      }
+    }).exec( (err, user) => {
+      if (err) { throw err };
+      if( user ){
+        res.send(user.wishlist);
+      }
+    });
+  });
 }

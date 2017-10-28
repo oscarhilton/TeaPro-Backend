@@ -12,7 +12,8 @@ const userSchema = new Schema({
   },
   name: String,
   avatar: String,
-  cupboard: [{ type: Schema.Types.ObjectId, ref: 'Tea' }]
+  cupboard: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
+  wishlist: [{ type: Schema.Types.ObjectId, ref: 'Tea' }]
 });
 
 // userSchema.pre("save", function(next) {
