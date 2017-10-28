@@ -1,7 +1,8 @@
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import GoogleStrategy from 'passport-google-oauth20';
-import User from '../models/User';
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 // Import Facebook and Google OAuth apps configs
 const keys = require('../config/keys');
 
