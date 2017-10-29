@@ -25,7 +25,6 @@ module.exports = app => {
 
   app.get('/api/category/:title', (req, res) => {
     Category.findOne({ title: req.params.title }).populate('teas').exec( (err, cat) => {
-      console.log(cat);
       res.send({ cat });
     });
   })
@@ -39,7 +38,6 @@ module.exports = app => {
       cat.save((err, updatedCat) => {
         if (err) { throw err };
         res.send(updatedCat);
-        console.log('updated!', updatedCat);
       })
     });
   });
@@ -51,7 +49,6 @@ module.exports = app => {
       } else {
         Category.findById( req.body.catId, (err, cat) => {
           if (err) { throw err };
-          console.log(cat);
           cat.save((err) => {
             if (err) { throw err };
             const newTea = new Tea({
@@ -64,7 +61,6 @@ module.exports = app => {
             });
             newTea.save((err, tea) => {
               if (err) { throw err };
-              console.log('Saved!', tea);
               res.send({ message: 'New tea added', newTea: tea });
             });
             cat.teas.push(newTea);
@@ -86,7 +82,6 @@ module.exports = app => {
         })
         newCategory.save((err, cat) => {
           if (err) { throw err };
-          console.log('Saved!', cat);
           res.send({ message: 'New category created!', category: cat })
         });
       };
@@ -95,7 +90,6 @@ module.exports = app => {
 
   app.post('/api/category/delete/:catId', (req, res) => {
     Category.findById({ _id: req.params.catId }, (err, cat) => {
-      console.log(cat);
       res.send({ cat });
       cat.remove();
     });
@@ -104,7 +98,6 @@ module.exports = app => {
   app.get('/api/teas/:teaId/category', (req, res) => {
     Tea.findOne({ _id: req.params.teaId }).populate('category', 'background').exec( (err, tea) => {
       if (err) { throw err };
-      console.log('TEA CATEGORY: ', tea, 'END');
       res.send({ category: tea.category.title });
     });
   });
@@ -112,7 +105,6 @@ module.exports = app => {
   app.get('/api/category/:catId/teas', (req, res) => {
     Category.findOne({ _id: req.params.catId }).populate('tea').exec( (err, cat) => {
       if (err) { throw err };
-      console.log(cat);
       res.send({ teas: cat.teas })
     });
   });

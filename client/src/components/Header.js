@@ -11,7 +11,7 @@ class Header extends Component {
       default:
         return (
           <span className="text-primary">
-            Hello {this.props.auth.firstName}. <a href="/api/logout">Logout</a>
+            Hello {this.props.auth.name}. <a href="/api/logout">Logout</a>
           </span>
         );
     }
