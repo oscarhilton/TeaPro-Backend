@@ -1,12 +1,10 @@
-'use strict';
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const Tea = mongoose.model('Tea');
 
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
-var Tea = mongoose.model('Tea');
-
-module.exports = function (app) {
-  app.post('/api/user/cupboard/add', function (req, res) {
-    User.findOne({ _id: req.body.userId }, function (err, user) {
+module.exports = app => {
+  app.post('/api/user/cupboard/add', (req, res) => {
+    User.findOne({ _id: req.body.userId }, (err, user) => {
       if (err) {
         throw err;
       };
@@ -16,7 +14,7 @@ module.exports = function (app) {
           res.send('Already got one');
           console.log('Already got one');
         } else {
-          Tea.findOne({ _id: req.body.teaId }, function (err, tea) {
+          Tea.findOne({ _id: req.body.teaId }, (err, tea) => {
             if (err) {
               throw err;
             };
@@ -29,14 +27,14 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/user/cupboard/get', function (req, res) {
+  app.post('/api/user/cupboard/get', (req, res) => {
     User.findOne({ _id: req.body.userId }).populate({
       path: 'cupboard',
       populate: {
         path: 'category',
         select: 'background'
       }
-    }).exec(function (err, user) {
+    }).exec((err, user) => {
       if (err) {
         throw err;
       };
@@ -46,8 +44,8 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/user/wishlist/add', function (req, res) {
-    User.findOne({ _id: req.body.userId }, function (err, user) {
+  app.post('/api/user/wishlist/add', (req, res) => {
+    User.findOne({ _id: req.body.userId }, (err, user) => {
       if (err) {
         throw err;
       };
@@ -57,7 +55,7 @@ module.exports = function (app) {
           res.send('Already got one');
           console.log('Already got one');
         } else {
-          Tea.findOne({ _id: req.body.teaId }, function (err, tea) {
+          Tea.findOne({ _id: req.body.teaId }, (err, tea) => {
             if (err) {
               throw err;
             };
@@ -70,14 +68,14 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/user/wishlist/get', function (req, res) {
+  app.post('/api/user/wishlist/get', (req, res) => {
     User.findOne({ _id: req.body.userId }).populate({
       path: 'wishlist',
       populate: {
         path: 'category',
         select: 'background'
       }
-    }).exec(function (err, user) {
+    }).exec((err, user) => {
       if (err) {
         throw err;
       };

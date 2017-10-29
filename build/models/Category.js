@@ -1,10 +1,7 @@
-'use strict';
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-
-var categorySchema = new Schema({
+const categorySchema = new Schema({
   title: String,
   teas: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
   background: String

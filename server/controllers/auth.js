@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 // Import Facebook and Google OAuth apps configs
 const keys = require('../config/keys');
+require('babel-polyfill');
 
 // Transform Facebook profile because Facebook and Google profile objects look different
 // and we want to transform them into user objects that have the same set of attributes

@@ -1,48 +1,45 @@
-'use strict';
+const mongoose = require('mongoose');
+const Category = mongoose.model('Category');
+const Tea = mongoose.model('Tea');
 
-var mongoose = require('mongoose');
-var Category = mongoose.model('Category');
-var Tea = mongoose.model('Tea');
-
-module.exports = function (app) {
-  app.get('/api/teas/all', function (req, res) {
-    Tea.find({}).populate('category').exec(function (err, teas) {
+module.exports = app => {
+  app.get('/api/teas/all', (req, res) => {
+    Tea.find({}).populate('category').exec((err, teas) => {
       if (err) {
         throw err;
       };
-      res.send({ teas: teas });
+      res.send({ teas });
     });
   });
 
-  app.get('/api/category/all', function (req, res) {
+  app.get('/api/category/all', (req, res) => {
     Category.find({}).populate({
       path: 'teas',
       populate: {
         path: 'category',
         select: 'background'
       }
-    }).exec(function (err, cats) {
+    }).exec((err, cats) => {
       if (err) {
         throw err;
       };
-      res.send({ cats: cats });
+      res.send({ cats });
     });
   });
 
-  app.get('/api/category/:title', function (req, res) {
-    Category.findOne({ title: req.params.title }).populate('teas').exec(function (err, cat) {
-      res.send({ cat: cat });
+  app.get('/api/category/:title', (req, res) => {
+    Category.findOne({ title: req.params.title }).populate('teas').exec((err, cat) => {
+      res.send({ cat });
     });
   });
 
-  app.post('/api/category/edit/:id', function (req, res) {
-    Category.findById({ _id: req.params.id }, function (err, cat) {
-      var background = req.body.editObj.background;
-
+  app.post('/api/category/edit/:id', (req, res) => {
+    Category.findById({ _id: req.params.id }, (err, cat) => {
+      const { background } = req.body.editObj;
       cat.set({
-        background: background
+        background
       });
-      cat.save(function (err, updatedCat) {
+      cat.save((err, updatedCat) => {
         if (err) {
           throw err;
         };
@@ -51,20 +48,20 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/teas/new', function (req, res) {
-    Tea.find({ title: req.body.tea.title }, function (err, tea) {
+  app.post('/api/teas/new', (req, res) => {
+    Tea.find({ title: req.body.tea.title }, (err, tea) => {
       if (tea && tea.length > 0) {
         res.send({ message: 'Already have a tea of that name!' });
       } else {
-        Category.findById(req.body.catId, function (err, cat) {
+        Category.findById(req.body.catId, (err, cat) => {
           if (err) {
             throw err;
           };
-          cat.save(function (err) {
+          cat.save(err => {
             if (err) {
               throw err;
             };
-            var newTea = new Tea({
+            const newTea = new Tea({
               title: req.body.tea.title,
               description: req.body.tea.description,
               origin: req.body.tea.origin,
@@ -72,7 +69,7 @@ module.exports = function (app) {
               steeptime: req.body.tea.steeptime,
               category: cat._id
             });
-            newTea.save(function (err, tea) {
+            newTea.save((err, tea) => {
               if (err) {
                 throw err;
               };
@@ -86,16 +83,16 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/category/new', function (req, res) {
-    Category.findOne({ title: req.body.title }, function (err, cat) {
+  app.post('/api/category/new', (req, res) => {
+    Category.findOne({ title: req.body.title }, (err, cat) => {
       if (cat) {
         res.send({ message: 'You already have a category of that title.', category: null });
       } else {
-        var newCategory = new Category({
+        const newCategory = new Category({
           title: req.body.title,
           background: '#212121'
         });
-        newCategory.save(function (err, cat) {
+        newCategory.save((err, cat) => {
           if (err) {
             throw err;
           };
@@ -105,15 +102,15 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/category/delete/:catId', function (req, res) {
-    Category.findById({ _id: req.params.catId }, function (err, cat) {
-      res.send({ cat: cat });
+  app.post('/api/category/delete/:catId', (req, res) => {
+    Category.findById({ _id: req.params.catId }, (err, cat) => {
+      res.send({ cat });
       cat.remove();
     });
   });
 
-  app.get('/api/teas/:teaId/category', function (req, res) {
-    Tea.findOne({ _id: req.params.teaId }).populate('category', 'background').exec(function (err, tea) {
+  app.get('/api/teas/:teaId/category', (req, res) => {
+    Tea.findOne({ _id: req.params.teaId }).populate('category', 'background').exec((err, tea) => {
       if (err) {
         throw err;
       };
@@ -121,8 +118,8 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/api/category/:catId/teas', function (req, res) {
-    Category.findOne({ _id: req.params.catId }).populate('tea').exec(function (err, cat) {
+  app.get('/api/category/:catId/teas', (req, res) => {
+    Category.findOne({ _id: req.params.catId }).populate('tea').exec((err, cat) => {
       if (err) {
         throw err;
       };

@@ -1,11 +1,12 @@
-'use strict';
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+require("babel-core/register");
+require("babel-polyfill");
 
-var express = require('express');
-var mongoose = require('mongoose');
-var cookieSession = require('cookie-session');
-var passport = require('passport');
-var bodyParser = require('body-parser');
-var keys = require('./config/keys');
+const keys = require('./config/keys');
 require('./models/User');
 require('./models/Tea');
 require('./models/Category');
@@ -13,7 +14,9 @@ require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
 
-var app = express();
+const app = express();
+
+// const populate = require('./populate');
 
 app.use(cookieSession({
   maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -30,11 +33,11 @@ require('./routes/userRoutes')(app);
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
-  var path = require('path');
-  app.get('*', function (req, res) {
+  const path = require('path');
+  app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
 
-var PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT);
