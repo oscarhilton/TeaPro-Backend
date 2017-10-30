@@ -38,10 +38,13 @@ module.exports = function (app) {
       }
     }).exec(function (err, user) {
       if (err) {
-        throw err;
+        throw err;console.log(err);
       };
       if (user) {
         res.send(user.cupboard);
+        console.log(user);
+      } else {
+        console.log('No user??');
       }
     });
   });
