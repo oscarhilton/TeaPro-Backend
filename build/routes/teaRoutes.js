@@ -23,8 +23,10 @@ module.exports = function (app) {
       }
     }).exec(function (err, cats) {
       if (err) {
+        console.log(err);
         throw err;
       };
+      console.log(cats);
       res.send({ cats: cats });
     });
   });

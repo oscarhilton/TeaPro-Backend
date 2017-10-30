@@ -18,8 +18,8 @@ module.exports = app => {
          select: 'background'
        }
      }).exec((err, cats) => {
-      if (err) { throw err };
-      res.send({ cats });
+      if (err) { throw err; };
+      console.log(cats);
     });
   });
 
