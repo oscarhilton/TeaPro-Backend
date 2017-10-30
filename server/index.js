@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-require("babel-core/register");
-require("babel-polyfill");
 
 const keys = require('./config/keys');
 require('./models/User');
