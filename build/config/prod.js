@@ -1,3 +1,5 @@
+'use strict';
+
 // DEV keys
 module.exports = {
   mongoURI: process.env.MONGO_URI,

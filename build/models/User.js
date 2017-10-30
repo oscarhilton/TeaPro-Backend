@@ -1,10 +1,13 @@
-const mongoose = require('mongoose');
-const bcrypt = require("bcryptjs");
-const { Schema } = mongoose;
+'use strict';
 
-const SALT_ROUNDS = 10;
+var mongoose = require('mongoose');
+var bcrypt = require("bcryptjs");
+var Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+
+var SALT_ROUNDS = 10;
+
+var userSchema = new Schema({
   oauth_id: {
     type: String,
     unique: true,
