@@ -5,8 +5,6 @@ var mongoose = require('mongoose');
 var cookieSession = require('cookie-session');
 var passport = require('passport');
 var bodyParser = require('body-parser');
-require("babel-core/register");
-require("babel-polyfill");
 
 var keys = require('./config/keys');
 require('./models/User');
