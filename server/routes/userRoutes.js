@@ -34,6 +34,7 @@ module.exports = app => {
       if (err) { throw err };
       if( user ){
         res.send(user.cupboard);
+        console.log(user);
       }
     });
   });
