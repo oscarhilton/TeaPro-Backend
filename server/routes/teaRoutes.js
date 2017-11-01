@@ -4,7 +4,7 @@ const Tea = mongoose.model('Tea');
 
 module.exports = app => {
   app.get('/api/teas/all', (req, res) => {
-    Tea.find({}).populate('category').exec((err, teas) => {
+    Tea.find().populate('category').exec((err, teas) => {
       if (err) { throw err };
       res.send({ teas });
     });
@@ -43,11 +43,11 @@ module.exports = app => {
   });
 
   app.post('/api/teas/new', (req, res) => {
-    Tea.find({ title: req.body.tea.title }, (err, tea) => {
-      if (tea && tea.length > 0) {
+    Tea.findOne({ title: req.body.tea.title }, (err, tea) => {
+      if (tea) {
         res.send({ message: 'Already have a tea of that name!' });
       } else {
-        Category.findById( req.body.catId, (err, cat) => {
+        Category.findOne({ _id: req.body.catId }, (err, cat) => {
           if (err) { throw err };
           cat.save((err) => {
             if (err) { throw err };
