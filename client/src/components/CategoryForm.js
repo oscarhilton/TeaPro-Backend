@@ -3,15 +3,47 @@ import { connect } from 'react-redux';
 import { newCategoryTitleChange, newCategory } from '../actions';
 
 class CategoryForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: {
+        type: 'Success',
+        text: 'Hello'
+      },
+      form: {
+        title: ''
+      }
+    }
+  }
+
   handleTitleChange(text) {
-    this.props.newCategoryTitleChange(text.target.value);
+    this.setState({
+      form: {
+        title: text.target.value
+      }
+    });
   }
 
   handleCreateCategory(e) {
     e.preventDefault();
-    if (this.props.categories.formValues.newCategory.title.length > 0) {
-      this.props.newCategory(this.props.categories.formValues.newCategory);
-      this.props.newCategoryTitleChange('');
+    if (this.state.form['title'].length > 0) {
+      this.props.newCategory(this.state);
+      this.setState({
+        form: {
+          title: '',
+        }
+      })
+    }
+  }
+
+  renderMessage() {
+    const { message } = this.state;
+    if (message['text'].length > 0) {
+      return (
+        <div className={'alert alert-' + message.type.toLowerCase()}>
+          <strong>{message.type}!</strong> Indicates a successful or positive action.
+        </div>
+      );
     }
   }
 
@@ -20,7 +52,7 @@ class CategoryForm extends Component {
       <form>
         <input
           placeholder="Category title"
-          value={this.props.categories.formValues.newCategory.title}
+          value={this.state.form.title}
           onChange={this.handleTitleChange.bind(this)}
         />
         <button
@@ -30,6 +62,7 @@ class CategoryForm extends Component {
         >
         Create new category
         </button>
+        {this.renderMessage()}
       </form>
     );
   };

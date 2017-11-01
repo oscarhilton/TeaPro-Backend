@@ -7,7 +7,7 @@ import { deleteCategory, getCategoryByName } from '../actions';
 
 class CategoryPage extends Component {
   componentWillMount() {
-    this.props.getCategoryByName(this.props.match.params.name);
+    this.props.getCategoryByName(this.props.match.params.title);
   }
   render() {
     const { title, teas } = this.props.categories.selected;
