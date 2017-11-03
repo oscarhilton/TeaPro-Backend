@@ -5,9 +5,14 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 
 const keys = require('./config/keys');
+
 require('./models/User');
 require('./models/Tea');
 require('./models/Category');
+require('./models/Reviews');
+require('./models/Moods');
+require('./models/Uploads');
+
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
@@ -27,7 +32,11 @@ app.use(passport.session());
 app.use(bodyParser.json());
 
 require('./routes/authRoutes')(app);
+require('./routes/moodsRoutes')(app);
+require('./routes/reviewRoutes')(app);
+require('./routes/searchRoutes')(app);
 require('./routes/teaRoutes')(app);
+require('./routes/uploadRoutes')(app);
 require('./routes/userRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {

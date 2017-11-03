@@ -87,6 +87,8 @@ export const getAllTeas = () => async dispatch => {
 export const getAllCategories = () => async dispatch => {
   const res = await axios.get('/api/category/all');
 
+  console.log(res);
+
   dispatch({ type: GET_ALL_CATEGORIES, payload: res.data.cats });
 };
 

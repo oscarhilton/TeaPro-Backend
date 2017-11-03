@@ -7,8 +7,8 @@ class CategoryForm extends Component {
     super(props);
     this.state = {
       message: {
-        type: 'Success',
-        text: 'Hello'
+        type: '',
+        text: ''
       },
       form: {
         title: ''
@@ -29,6 +29,10 @@ class CategoryForm extends Component {
     if (this.state.form['title'].length > 0) {
       this.props.newCategory(this.state);
       this.setState({
+        message: {
+          type: 'Success',
+          text: 'Category successfully added!'
+        },
         form: {
           title: '',
         }
@@ -41,7 +45,7 @@ class CategoryForm extends Component {
     if (message['text'].length > 0) {
       return (
         <div className={'alert alert-' + message.type.toLowerCase()}>
-          <strong>{message.type}!</strong> Indicates a successful or positive action.
+          <strong>{message.type}!</strong> {message.text}
         </div>
       );
     }

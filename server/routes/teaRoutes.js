@@ -11,7 +11,7 @@ module.exports = app => {
   });
 
   app.get('/api/category/all', (req, res) => {
-    Category.find({}).populate({
+    Category.find().populate({
        path: 'teas',
        populate: {
          path: 'category',
@@ -19,7 +19,6 @@ module.exports = app => {
        }
      }).exec((err, cats) => {
       if (err) { throw err; };
-      console.log(cats);
     });
   });
 
