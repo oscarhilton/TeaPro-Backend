@@ -44,7 +44,7 @@ if (process.env.NODE_ENV === 'production') {
 
   var path = require('path');
   app.get('*', function (req, res) {
-    res.sendFile(path.resolve(__dirname, '/../client', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
 
