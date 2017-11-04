@@ -5,7 +5,7 @@ const Thumbnail = (props) => {
   console.log(props.imageData);
   return (
     <div>
-      <img src={path} />
+      <img src={`/uploads/${title}`} />
       <span>{title}</span>
     </div>
   );

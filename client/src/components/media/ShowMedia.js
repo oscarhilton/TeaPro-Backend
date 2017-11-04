@@ -9,10 +9,9 @@ class ShowMedia extends Component {
   componentDidMount() {
     this.props.fetchAllFiles();
   }
-  
+
   render() {
-    console.log(this.props.media.files);
-    const thumbnails = this.props.media.files.map( (file) => <Thumbnail imageData={file} />);
+    const thumbnails = this.props.media.files.map( (file) => <Thumbnail key={file._id} imageData={file} />);
     return (
       <div>
         <h2>Media</h2>
