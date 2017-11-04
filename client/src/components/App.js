@@ -8,6 +8,7 @@ import Header from './Header';
 import Dashboard from './Dashboard';
 import CategoryPage from './CategoryPage';
 import Moods from './moods/Moods';
+import ShowMedia from './media/ShowMedia';
 const Landing = () => <h2>Landing</h2>;
 
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
             <Route exact path="/category/:title" component={CategoryPage} />
             <Route exact path="/moods" component={Moods} />
             <Route exact path="/moods/:name" component={Moods} />
+            <Route exact path="/media" component={ShowMedia} />
           </div>
         </BrowserRouter>
       </div>

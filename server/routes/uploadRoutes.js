@@ -33,4 +33,13 @@ module.exports = app => {
       console.log(newFile);
   	});
   });
+
+  app.get('/api/media/all', (req, res) => {
+    Uploads.find({}, (err, media) => {
+      console.log(media);
+      res.send(media);
+      console.log(res);
+    });
+  });
+
 };

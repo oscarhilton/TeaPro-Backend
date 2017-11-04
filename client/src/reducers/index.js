@@ -3,10 +3,12 @@ import auth from './authReducer';
 import teas from './teasReducer';
 import categories from './categoryReducer';
 import moods from './moodsReducer';
+import media from './uploadReducer';
 
 export default combineReducers({
   auth,
   teas,
   categories,
-  moods
+  moods,
+  media
 });
