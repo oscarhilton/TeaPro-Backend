@@ -13,8 +13,22 @@ var teaSchema = new Schema({
   origin: String,
   steeptime: String,
   flavoured: Boolean,
-  moods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }],
-  health: [{ type: Schema.Types.ObjectId, ref: 'Health' }]
+  moods: [{
+    mood: { type: Schema.Types.ObjectId, ref: 'Moods' },
+    score: { type: Number, min: 0, max: 100 }
+  }],
+  health: [{ type: Schema.Types.ObjectId, ref: 'Health' }],
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 });
+
+// teaSchema.methods.findSimiarCateogory = function(cb) {
+//   return this.model('Tea').find({ category: })
+// }
+
+teaSchema.statics.getReviewTotal = function (id, cb) {
+  return this.findOne({ _id: id }, function (err, tea) {
+    cb(tea['reviews'].length);
+  });
+};
 
 mongoose.model('Tea', teaSchema);

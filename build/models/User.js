@@ -19,6 +19,16 @@ var userSchema = new Schema({
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'Tea' }]
 });
 
+userSchema.statics.getCupboardTeas = function (text, cb) {
+  console.log('hello!', text);
+};
+
+userSchema.statics.getCupboardTotal = function (id, cb) {
+  return this.findOne({ _id: id }, function (err, user) {
+    cb(user['cupboard'].length);
+  });
+};
+
 // userSchema.pre("save", function(next) {
 //     var user = this;
 //     if (!user.isModified("password")) {

@@ -6,7 +6,7 @@ var Tea = mongoose.model('Tea');
 
 module.exports = function (app) {
   app.get('/api/teas/all', function (req, res) {
-    Tea.find({}).populate('category').exec(function (err, teas) {
+    Tea.find().populate('category').exec(function (err, teas) {
       if (err) {
         throw err;
       };
@@ -15,7 +15,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/category/all', function (req, res) {
-    Category.find({}).populate({
+    Category.find().populate({
       path: 'teas',
       populate: {
         path: 'category',
@@ -25,7 +25,6 @@ module.exports = function (app) {
       if (err) {
         throw err;
       };
-      res.send({ cats: cats });
     });
   });
 
@@ -52,11 +51,11 @@ module.exports = function (app) {
   });
 
   app.post('/api/teas/new', function (req, res) {
-    Tea.find({ title: req.body.tea.title }, function (err, tea) {
-      if (tea && tea.length > 0) {
+    Tea.findOne({ title: req.body.tea.title }, function (err, tea) {
+      if (tea) {
         res.send({ message: 'Already have a tea of that name!' });
       } else {
-        Category.findById(req.body.catId, function (err, cat) {
+        Category.findOne({ _id: req.body.catId }, function (err, cat) {
           if (err) {
             throw err;
           };
