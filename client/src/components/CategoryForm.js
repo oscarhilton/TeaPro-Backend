@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { newCategoryTitleChange, newCategory } from '../actions';
+import { newCategory } from '../actions';
 
 class CategoryForm extends Component {
   constructor(props) {
@@ -76,4 +76,4 @@ const mapStateToProps = ({ categories }) => {
   return { categories };
 }
 
-export default connect(mapStateToProps, { newCategoryTitleChange, newCategory })(CategoryForm);
+export default connect(mapStateToProps, { newCategory })(CategoryForm);

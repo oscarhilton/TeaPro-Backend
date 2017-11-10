@@ -1,54 +1,60 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  newTeaTitleChange,
-  newTeaDescriptionChange,
-  newTeaOriginChange,
-  newTeaCaffeineChange,
-  newTeaSteeptimeChange,
-  newTea
-} from '../actions';
+import { newTea } from '../actions';
 
 class TeaForm extends Component {
-  handleChange(func, event) {
-    if (event.target.value.length > 0) {
-      func(event.target.value)
+  constructor(props) {
+    super(props);
+    this.state = {
+      form: {
+        title: '',
+        description: '',
+        origin: '',
+        caffeine: '',
+        steeptime: ''
+      }
     }
+  }
+
+  handleChange(func, event) {
+    // if (event.target.value.length > 0) {
+    //   func(event.target.value)
+    // }
   }
 
   handleCreateTea(e) {
     e.preventDefault();
-    const newTea = this.props.categories.formValues.newTea;
+    const newTea = this.state.form;
     const catId = this.props.categories.selected._id;
 
     this.props.newTea(newTea, catId);
   }
 
   render() {
-    const { title, description, origin, caffeine, steeptime } = this.props.categories.formValues.newTea;
+    const { title, description, origin, caffeine, steeptime } = this.state;
     return (
       <form>
         <input
           placeholder="Tea title"
           value={ title }
-          onChange={this.handleChange.bind(this, this.props.newTeaTitleChange)}
+          onChange={this.handleChange.bind(this)}
         />
         <br/>
         <textarea
           placeholder="Description"
           value={ description }
-          onChange={this.handleChange.bind(this, this.props.newTeaDescriptionChange)}
+          onChange={this.handleChange.bind(this)}
         />
         <br/>
         <input
           placeholder="Origin"
           value={ origin }
-          onChange={this.handleChange.bind(this, this.props.newTeaOriginChange)}
+          onChange={this.handleChange.bind(this)}
         />
         <br/>
         <select
           value={ caffeine }
-          onChange={this.handleChange.bind(this, this.props.newTeaCaffeineChange)}
+          onChange={this.handleChange.bind(this)}
         >
           <option value="high">High</option>
           <option value="medium">Medium</option>
@@ -58,7 +64,7 @@ class TeaForm extends Component {
         <input
           placeholder="Steep Time"
           value={ steeptime }
-          onChange={this.handleChange.bind(this, this.props.newTeaSteeptimeChange)}
+          onChange={this.handleChange.bind(this)}
         />
         <br/>
         <button
@@ -77,13 +83,4 @@ const mapStateToProps = ({ categories }) => {
   return { categories };
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    newTeaTitleChange,
-    newTeaDescriptionChange,
-    newTeaOriginChange,
-    newTeaCaffeineChange,
-    newTeaSteeptimeChange,
-    newTea
-  })(TeaForm);
+export default connect(mapStateToProps, { newTea })(TeaForm);

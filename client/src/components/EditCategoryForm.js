@@ -1,31 +1,64 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import SelectFile from './media/SelectFile';
 import {
-  editCategoryBackgroundChange,
   editCategory
 } from '../actions';
 
 class EditCategoryForm extends Component {
-  handleChange(func, event) {
-    if (event.target.value.length > 0) {
-      func(event.target.value)
+  constructor(props) {
+    super(props);
+    this.state = {
+      form: {
+        background: '',
+        image: ''
+      }
     }
+  }
+
+  handleChange(event) {
+    if (event.target.value.length > 0) {
+      this.setState({
+        ...this.state,
+        form: {
+          ...this.state.form,
+          [event.target.name]: event.target.value
+        }
+      });
+    }
+  }
+
+  handleSelectFile(event) {
+    this.setState({
+      ...this.state,
+      form: {
+        ...this.state.form,
+        image: event.target.value
+      }
+    });
   }
 
   handleUpdate(e) {
     e.preventDefault();
-    const { formValues, selected } = this.props.categories;
-    this.props.editCategory(selected._id, formValues.editCategory);
+    const { selected } = this.props.categories;
+    console.log(selected);
+    this.props.editCategory(selected._id, this.state.form);
   }
 
   render() {
-    const { background } = this.props.categories.formValues.editCategory;
+    const { background } = this.state.form;
+    console.log(this.props);
     return (
       <form>
         <input
           placeholder="Background colour"
-          onChange={this.handleChange.bind(this, this.props.editCategoryBackgroundChange)}
+          onChange={this.handleChange.bind(this)}
+          name="background"
           value={ background }
+        />
+        <br/>
+        <SelectFile
+          onChange={this.handleSelectFile.bind(this)}
         />
         <br/>
         <button
@@ -44,4 +77,4 @@ const mapStateToProps = ({ categories }) => {
   return { categories };
 };
 
-export default connect(mapStateToProps, { editCategoryBackgroundChange, editCategory })(EditCategoryForm);
+export default connect(mapStateToProps, { editCategory })(EditCategoryForm);

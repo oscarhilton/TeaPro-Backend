@@ -17,8 +17,9 @@ module.exports = app => {
          path: 'category',
          select: 'background'
        }
-     }).exec((err, cats) => {
+     }).populate('image').exec((err, cats) => {
       if (err) { throw err; };
+      res.send(cats);
     });
   });
 
@@ -30,9 +31,10 @@ module.exports = app => {
 
   app.post('/api/category/edit/:id', (req, res) => {
     Category.findById({ _id: req.params.id }, (err, cat) => {
-      const { background } = req.body.editObj;
+      const { background, image } = req.body.editObj;
       cat.set({
-        background
+        background,
+        image
       })
       cat.save((err, updatedCat) => {
         if (err) { throw err };

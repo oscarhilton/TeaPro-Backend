@@ -11,9 +11,6 @@
     },
     "/api/*": {
       "target": "http://localhost:5000"
-    },
-    "/media/*": {
-      "target": "http://localhost:5000"
     }
   },
   "dependencies": {

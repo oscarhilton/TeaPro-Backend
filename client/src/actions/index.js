@@ -3,15 +3,8 @@ import {
   FETCH_USER,
   GET_ALL_TEAS,
   GET_ALL_CATEGORIES,
-  NEW_CATEGORY_TITLE_CHANGE,
   NEW_CATEGORY,
-  EDIT_CATEGORY_BACKGROUND_CHANGE,
   EDIT_CATEGORY,
-  NEW_TEA_TITLE_CHANGE,
-  NEW_TEA_DESCRIPTION_CHANGE,
-  NEW_TEA_ORIGIN_CHANGE,
-  NEW_TEA_CAFFEINE_CHANGE,
-  NEW_TEA_STEEPTIME_CHANGE,
   NEW_TEA,
   DELETE_CATEGORY,
   GET_CATEGORY_BY_NAME
@@ -21,55 +14,6 @@ export const fetchUser = () => async dispatch => {
   const res = await axios.get('./api/current_user');
 
   dispatch({ type: FETCH_USER, payload: res.data });
-};
-
-export const newCategoryTitleChange = text => {
-  return {
-    type: NEW_CATEGORY_TITLE_CHANGE,
-    payload: text
-  };
-};
-
-export const newTeaTitleChange = text => {
-  return {
-    type: NEW_TEA_TITLE_CHANGE,
-    payload: text
-  };
-};
-
-export const newTeaDescriptionChange = text => {
-  return {
-    type: NEW_TEA_DESCRIPTION_CHANGE,
-    payload: text
-  };
-};
-
-export const newTeaOriginChange = text => {
-  return {
-    type: NEW_TEA_ORIGIN_CHANGE,
-    payload: text
-  };
-};
-
-export const newTeaCaffeineChange = text => {
-  return {
-    type: NEW_TEA_CAFFEINE_CHANGE,
-    payload: text
-  };
-};
-
-export const newTeaSteeptimeChange = text => {
-  return {
-    type: NEW_TEA_STEEPTIME_CHANGE,
-    payload: text
-  };
-};
-
-export const editCategoryBackgroundChange = text => {
-  return {
-    type: EDIT_CATEGORY_BACKGROUND_CHANGE,
-    payload: text
-  };
 };
 
 export const editCategory = (catId, editObj) => async dispatch => {
@@ -89,7 +33,7 @@ export const getAllCategories = () => async dispatch => {
 
   console.log(res);
 
-  dispatch({ type: GET_ALL_CATEGORIES, payload: res.data.cats });
+  dispatch({ type: GET_ALL_CATEGORIES, payload: res.data });
 };
 
 export const getCategoryByName = (title) => async dispatch => {

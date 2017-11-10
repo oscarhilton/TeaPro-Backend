@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createMood } from '../../actions/moodsActions';
+import SelectFile from '../media/SelectFile';
 
 class MoodsForm extends Component {
   constructor(props) {
@@ -9,8 +10,7 @@ class MoodsForm extends Component {
       form: {
         title: '',
         description: '',
-        image: '',
-        imageData: {}
+        image: ''
       }
     }
   }
@@ -25,37 +25,28 @@ class MoodsForm extends Component {
     });
   }
 
-  handleFileUpload(event) {
-    // this.setState({ form: { imageData: event.target.files[0] } });
-    // console.log(this.state);
-    console.log('hi');
-    const data = new FormData();
-    data.append('thumbnail', event.target.files[0]);
-    data.append('name', this.state.title);
-    // this.setState({ form: { imageData: data } });
-    if (this.state.form.title.length > -1) {
-      this.props.createMood(data);
-    }
+  handleSelectFile(event) {
+    this.setState({
+      ...this.state,
+      form: {
+        ...this.state.form,
+        image: event.target.value
+      }
+    });
   }
 
   handleCreateMood(event) {
-    // event.preventDefault();
-    // const data = new FormData();
-    // console.log('hi');
-    // data.append('thumbnail', event.target.files[0]);
-    // data.append('name', this.state.title);
-    // // this.setState({ form: { imageData: data } });
-    // if (this.state.form.title.length > -1) {
-    //   this.props.createMood(this.state.form, this.state.imageData);
-    // }
+    event.preventDefault();
+    console.log(this.state);
+    if (this.state.form.title.length > 1) {
+      this.props.createMood(this.state.form);
+    }
   }
 
   render() {
     const { description, title, image } = this.state.form;
     return (
       <form
-        action="/pictures/upload"
-        encType="multipart/form-data"
         onSubmit={this.handleCreateMood.bind(this)}
       >
         <input
@@ -74,11 +65,8 @@ class MoodsForm extends Component {
           value={description}
         />
         <br/>
-        <input
-          id="file"
-          name="imageURI"
-          type="file"
-          onChange={this.handleFileUpload.bind(this)}
+        <SelectFile
+          onChange={this.handleSelectFile.bind(this)}
         />
         <br/>
         <button

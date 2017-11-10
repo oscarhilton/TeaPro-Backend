@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import UploadFile from './UploadFile';
 import Thumbnail from './Thumbnail';
 import { ImageUpload } from '../common';
-import { fetchAllFiles } from '../../actions/uploadActions'
+import { fetchAllFiles } from '../../actions/uploadActions';
 
 class ShowMedia extends Component {
   componentDidMount() {
