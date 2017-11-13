@@ -13,11 +13,28 @@ const userSchema = new Schema({
   name: String,
   avatar: String,
   cupboard: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
-  wishlist: [{ type: Schema.Types.ObjectId, ref: 'Tea' }]
+  wishlist: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
+  options: {
+    chosenMoods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }],
+    chosenCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }]
+  },
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 });
 
 userSchema.statics.getCupboardTeas = function(text, cb) {
   console.log('hello!', text);
+}
+
+userSchema.statics.checkOnBoarding = function(id, cb) {
+  this.findOne({ _id: id }, (err, user) => {
+    const chosenMoods = user.options.chosenMoods.length;
+    const chosenCategories = user.options.chosenCategories.length;
+    if(chosenMoods > 0 && chosenCategories > 0) {
+      return cb(true);
+    } else {
+      return cb(false);
+    }
+  });
 }
 
 userSchema.statics.getCupboardTotal = function(id, cb) {

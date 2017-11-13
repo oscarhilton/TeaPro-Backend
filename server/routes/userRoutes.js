@@ -35,6 +35,12 @@ module.exports = app => {
     })
   });
 
+  app.get('/api/user/:user/onboardstatus', (req, res) => {
+    User.checkOnBoarding(req.params.user, (onBoard) => {
+      res.send(onBoard);
+    })
+  });
+
   app.post('/api/user/:user/cupboard', (req, res) => {
     User.findOne({ _id: req.params.user }).populate({
       path: 'cupboard',

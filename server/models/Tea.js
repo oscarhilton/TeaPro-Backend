@@ -24,6 +24,8 @@ const teaSchema = new Schema({
 //   return this.model('Tea').find({ category: })
 // }
 
+teaSchema.index({title: 'text'});
+
 teaSchema.statics.getReviewTotal = function(id, cb) {
   return this.findOne({ _id: id }, (err, tea) => {
     cb(tea['reviews'].length);
