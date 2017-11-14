@@ -43,6 +43,22 @@ module.exports = function (app) {
     });
   });
 
+  app.get('/api/user/:user/onboardstatus', function (req, res) {
+    User.checkOnBoarding(req.params.user, function (onBoard) {
+      console.log(onBoard);
+      res.send(onBoard);
+    });
+  });
+
+  app.post('/api/user/:user/onboardsubmit', function (req, res) {
+    User.findOne({ _id: req.params.user }, function (err, user) {
+      user.chosenMoods = req.body.moods;
+      user.chosenCategories = req.body.categories;
+      user.save();
+      res.end();
+    });
+  });
+
   app.post('/api/user/:user/cupboard', function (req, res) {
     User.findOne({ _id: req.params.user }).populate({
       path: 'cupboard',
@@ -100,6 +116,15 @@ module.exports = function (app) {
       if (user) {
         res.send(user.wishlist);
       }
+    });
+  });
+
+  app.get('/api/user/:user/discover', function (req, res) {
+    User.findOne({ _id: req.params.user }).populate('chosenCategories').populate('chosenMoods').exec(function (err, user) {
+      if (err) {
+        throw err;
+      };
+      console.log(user);
     });
   });
 };

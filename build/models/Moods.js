@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 var moodsSchema = new Schema({
   title: String,
   description: String,
-  imageURI: String,
+  image: { type: Schema.Types.ObjectId, ref: 'Uploads' },
   teas: [{ type: Schema.Types.ObjectId, ref: 'Tea' }]
 });
 

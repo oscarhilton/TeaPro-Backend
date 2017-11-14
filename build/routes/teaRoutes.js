@@ -21,10 +21,11 @@ module.exports = function (app) {
         path: 'category',
         select: 'background'
       }
-    }).exec(function (err, cats) {
+    }).populate('image').exec(function (err, cats) {
       if (err) {
         throw err;
       };
+      res.send(cats);
     });
   });
 
@@ -36,10 +37,13 @@ module.exports = function (app) {
 
   app.post('/api/category/edit/:id', function (req, res) {
     Category.findById({ _id: req.params.id }, function (err, cat) {
-      var background = req.body.editObj.background;
+      var _req$body$editObj = req.body.editObj,
+          background = _req$body$editObj.background,
+          image = _req$body$editObj.image;
 
       cat.set({
-        background: background
+        background: background,
+        image: image
       });
       cat.save(function (err, updatedCat) {
         if (err) {

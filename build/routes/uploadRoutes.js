@@ -36,15 +36,12 @@ module.exports = function (app) {
       });
       newFile.save();
       res.send(newFile);
-      console.log(newFile);
     });
   });
 
   app.get('/api/media/all', function (req, res) {
     Uploads.find({}, function (err, media) {
-      console.log(media);
       res.send(media);
-      console.log(res);
     });
   });
 };
