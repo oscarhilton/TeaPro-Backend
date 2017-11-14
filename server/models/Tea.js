@@ -20,16 +20,23 @@ const teaSchema = new Schema({
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 });
 
-// teaSchema.methods.findSimiarCateogory = function(cb) {
-//   return this.model('Tea').find({ category: })
-// }
+teaSchema.index({title: 'text', description: 'text', category: 'text'});
 
-teaSchema.index({title: 'text'});
-
-teaSchema.statics.getReviewTotal = function(id, cb) {
-  return this.findOne({ _id: id }, (err, tea) => {
+teaSchema.statics.getReviewTotal = function(_id, cb) {
+  return this.findOne({ _id }, (err, tea) => {
     cb(tea['reviews'].length);
   });
 }
+
+// teaSchema.virtual('rating').get(function() {
+//   const numberOfReviews = this.reviews.length;
+//   let ratings = [];
+//   for (var i = 0; i < numberOfReviews; i++) {
+//     ratings.push(this.reviews[i].rating);
+//   };
+//   const sum = ratings.reduce((a, b) => a + b, 0);
+//   const average = sum / numberOfReviews;
+//   return Math.round(average * 10) / 10;
+// });
 
 mongoose.model('Tea', teaSchema);

@@ -37,8 +37,18 @@ module.exports = app => {
 
   app.get('/api/user/:user/onboardstatus', (req, res) => {
     User.checkOnBoarding(req.params.user, (onBoard) => {
+      console.log(onBoard);
       res.send(onBoard);
     })
+  });
+
+  app.post('/api/user/:user/onboardsubmit', (req, res) => {
+    User.findOne({ _id: req.params.user }, (err, user) => {
+      user.chosenMoods = req.body.moods;
+      user.chosenCategories = req.body.categories;
+      user.save();
+      res.end();
+    });
   });
 
   app.post('/api/user/:user/cupboard', (req, res) => {
@@ -91,5 +101,16 @@ module.exports = app => {
         res.send(user.wishlist);
       }
     });
+  });
+
+
+  app.get('/api/user/:user/discover', (req, res) => {
+    User.findOne({ _id: req.params.user })
+        .populate('chosenCategories')
+        .populate('chosenMoods')
+        .exec((err, user) => {
+          if (err) { throw err };
+          console.log(user);
+        });
   });
 }

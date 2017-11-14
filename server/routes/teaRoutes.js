@@ -11,16 +11,19 @@ module.exports = app => {
   });
 
   app.get('/api/category/all', (req, res) => {
-    Category.find().populate({
-       path: 'teas',
-       populate: {
-         path: 'category',
-         select: 'background'
-       }
-     }).populate('image').exec((err, cats) => {
-      if (err) { throw err; };
-      res.send(cats);
-    });
+    Category.find()
+            .populate({
+                       path: 'teas',
+                       populate: {
+                         path: 'category',
+                         select: 'background'
+                       }
+                     })
+            .populate('image')
+            .exec((err, cats) => {
+              if (err) { throw err; };
+              res.send(cats);
+            });
   });
 
   app.get('/api/category/:title', (req, res) => {

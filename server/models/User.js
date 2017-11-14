@@ -14,10 +14,8 @@ const userSchema = new Schema({
   avatar: String,
   cupboard: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
-  options: {
-    chosenMoods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }],
-    chosenCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }]
-  },
+  chosenMoods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }],
+  chosenCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 });
 
@@ -29,10 +27,11 @@ userSchema.statics.checkOnBoarding = function(id, cb) {
   this.findOne({ _id: id }, (err, user) => {
     const chosenMoods = user.options.chosenMoods.length;
     const chosenCategories = user.options.chosenCategories.length;
+    console.log(chosenMoods, chosenCategories);
     if(chosenMoods > 0 && chosenCategories > 0) {
-      return cb(true);
-    } else {
       return cb(false);
+    } else {
+      return cb(true);
     }
   });
 }
