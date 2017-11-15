@@ -45,7 +45,6 @@ module.exports = function (app) {
 
   app.get('/api/user/:user/onboardstatus', function (req, res) {
     User.checkOnBoarding(req.params.user, function (onBoard) {
-      console.log(onBoard);
       res.send(onBoard);
     });
   });

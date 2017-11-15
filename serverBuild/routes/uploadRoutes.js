@@ -13,7 +13,17 @@ var storage = multer.diskStorage({
   }
 });
 
+var userStorage = multer.diskStorage({
+  destination: function destination(req, file, cb) {
+    cb(null, __dirname + '/../../client/public/uploads/user/');
+  },
+  filename: function filename(req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
 var upload = multer({ storage: storage }).single('file');
+var userUpload = multer({ storage: userStorage }).single('file');
 
 module.exports = function (app) {
   app.post('/api/upload', function (req, res, next) {
@@ -37,6 +47,26 @@ module.exports = function (app) {
       newFile.save();
       res.send(newFile);
     });
+  });
+
+  app.post('/api/userupload', function (req, res, next) {
+    // const { title, description } = req.body;
+    console.log(req.file);
+    // userUpload(req,res,function(err) {
+    // 	if(err) {
+    // 		return res.end('Error uploading file.');
+    //
+    // 	}
+    // const { originalname, mimetype, path, size } = req.file;
+    // const newFile = new Uploads({
+    //   title: originalname,
+    //   path,
+    //   type: mimetype,
+    //   size
+    // })
+    // newFile.save();
+    // res.send(newFile);
+    // });
   });
 
   app.get('/api/media/all', function (req, res) {
