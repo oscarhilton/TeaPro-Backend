@@ -25,13 +25,12 @@ userSchema.statics.getCupboardTeas = function(text, cb) {
 
 userSchema.statics.checkOnBoarding = function(id, cb) {
   this.findOne({ _id: id }, (err, user) => {
-    const chosenMoods = user.options.chosenMoods.length;
-    const chosenCategories = user.options.chosenCategories.length;
-    console.log(chosenMoods, chosenCategories);
-    if(chosenMoods > 0 && chosenCategories > 0) {
-      return cb(false);
-    } else {
+    const chosenMoods = user.chosenMoods.length;
+    const chosenCategories = user.chosenCategories.length;
+    if (chosenMoods > 0 && chosenCategories > 0) {
       return cb(true);
+    } else {
+      return cb(false);
     }
   });
 }

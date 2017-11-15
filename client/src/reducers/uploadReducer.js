@@ -9,7 +9,10 @@ export default function(state = {
         files: action.payload
       }
     case UPLOAD_FILE:
-      return state;
+      return {
+        ...state,
+        files: [...state.files, action.payload]
+      };
     default:
       return state;
   }
