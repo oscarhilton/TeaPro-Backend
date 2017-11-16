@@ -22,6 +22,6 @@ export const fetchAllFiles = () => async dispatch => {
 }
 
 export const deleteFile = (fileId) => async dispatch => {
-  const res = await axios.post(`/api/media/${fileId}`);
+  const res = await axios.post(`/api/media/${fileId}/delete`);
   dispatch({ type: DELETE_FILE, payload: res.data });
 }
