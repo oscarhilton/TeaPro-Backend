@@ -16,6 +16,9 @@ class ShowMedia extends Component {
       <div>
         <h2>Media</h2>
         <UploadFile />
+        <div className='alert alert-success'>
+          {this.props.media.message}
+        </div>
         {thumbnails}
       </div>
     );

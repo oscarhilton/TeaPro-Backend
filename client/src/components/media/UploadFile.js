@@ -3,19 +3,39 @@ import { connect } from 'react-redux';
 import { uploadFile } from '../../actions/uploadActions';
 
 class UploadFile extends Component {
-  handleFileUpload(event) {
-    const data = new FormData();
-    data.append('file', event.target.files[0]);
-    this.props.uploadFile(data);
+  constructor(props) {
+    super(props);
+    this.state ={
+      file:null
+    }
+    this.onFormSubmit = this.onFormSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.prepareUpload = this.prepareUpload.bind(this);
   }
-
+  onFormSubmit(e){
+    e.preventDefault() // Stop form submit
+    if (this.state.file !== null) {
+      this.prepareUpload(this.state.file);
+    }
+  }
+  onChange(e) {
+    this.setState({file:e.target.files[0]})
+  }
+  prepareUpload(file){
+    const formData = new FormData();
+    formData.append('file',file)
+    this.props.uploadFile(formData);
+  }
   render() {
     return (
-      <input
-        name="file"
-        type="file"
-        onChange={this.handleFileUpload.bind(this)}
-      />
+      <form onSubmit={this.onFormSubmit}>
+        <input
+          name="file"
+          type="file"
+          onChange={this.onChange}
+        />
+        <button type="submit">Upload</button>
+      </form>
     );
   };
 };
