@@ -34,6 +34,7 @@ module.exports = function (app) {
     // const { title, description } = req.body;
     upload(req, res, function (err) {
       if (err) {
+        console.log(err);
         return res.end('Error uploading file.');
       }
       var _req$file = req.file,
@@ -88,7 +89,7 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/media/:fileId', function (req, res) {
+  app.post('/api/media/:fileId/delete', function (req, res) {
     Uploads.findOne({ _id: req.params.fileId }, function (err, file) {
       if (err) {
         throw err;
