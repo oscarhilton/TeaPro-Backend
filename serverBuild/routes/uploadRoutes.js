@@ -52,9 +52,9 @@ module.exports = function (app) {
 
   app.post('/api/userupload', function (req, res, next) {
     // const { title, description } = req.body;
-    console.log(req);
     console.log(req.file);
     console.log(req.body);
+    res.send(req.file);
     // userUpload(req,res,function(err) {
     // 	if(err) {
     // 		return res.end('Error uploading file.');
