@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Uploads = mongoose.model('Uploads');
 const multer = require('multer');
 const fs = require('fs');
+const Tea = mongoose.model('Tea');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -67,6 +68,11 @@ module.exports = app => {
       })
       console.log(newUserFile);
       newUserFile.save();
+      Tea.findOne({ _id: req.body.teaId }, (err, tea) => {
+        tea.userImages.push(newUserFile);
+        tea.save();
+        console.log(tea);
+      });
     });
   });
 
