@@ -21,6 +21,10 @@ const userStorage = multer.diskStorage({
   }
 });
 
+const uploadUserImage = (req, res, callback) => {
+
+};
+
 var upload = multer({ storage : storage }).single('file');
 var userUpload = multer({ storage : userStorage }).single('file');
 
@@ -30,7 +34,6 @@ module.exports = app => {
     upload(req,res,function(err) {
   		if(err) {
   			return res.end('Error uploading file.');
-
   		}
       const { originalname, mimetype, path, size } = req.file;
       const newFile = new Uploads({
@@ -44,26 +47,27 @@ module.exports = app => {
   	});
   });
 
-  app.post('/api/userupload', (req, res, next) => {
-    // const { title, description } = req.body;
-    console.log(req.file);
-    console.log(req.body);
-    res.send(req.file);
-    // userUpload(req,res,function(err) {
-  	// 	if(err) {
-  	// 		return res.end('Error uploading file.');
-    //
-  	// 	}
-      // const { originalname, mimetype, path, size } = req.file;
-      // const newFile = new Uploads({
-      //   title: originalname,
-      //   path,
-      //   type: mimetype,
-      //   size
-      // })
-      // newFile.save();
-      // res.send(newFile);
-  	// });
+  app.post('/api/userupload/tea', (req, res, next) => {
+    userUpload(req,res,function(err) {
+      if(err) {
+        return res.end('Error uploading file.');
+      }
+      console.log(req.body);
+      const { path, filename, size } = req.file;
+      const { timestamp, latitude, longitude } = req.body;
+      const newUserFile = new Uploads({
+        title: filename,
+        path,
+        type: 'image',
+        size,
+        latitude,
+        longitude,
+        uploadDate: timestamp,
+        approved: false
+      })
+      console.log(newUserFile);
+      newUserFile.save();
+    });
   });
 
   app.post('/api/media/:fileId', (req, res) => {

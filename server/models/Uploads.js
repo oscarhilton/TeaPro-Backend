@@ -9,7 +9,8 @@ const uploadsSchema = new Schema({
   uploadDate: Date,
   latitude: Number,
   longitude: Number,
-  author: { type: Schema.Types.ObjectId, ref: 'User' }
+  author: { type: Schema.Types.ObjectId, ref: 'User' },
+  approved: Boolean
 });
 
 mongoose.model('Uploads', uploadsSchema);

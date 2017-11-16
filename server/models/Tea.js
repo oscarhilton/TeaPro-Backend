@@ -17,7 +17,8 @@ const teaSchema = new Schema({
     }
   ],
   health: [{ type: Schema.Types.ObjectId, ref: 'Health' }],
-  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  userImages: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }]
 });
 
 teaSchema.index({title: 'text', description: 'text', category: 'text'});
