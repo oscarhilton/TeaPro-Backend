@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var Uploads = mongoose.model('Uploads');
 var multer = require('multer');
+var fs = require('fs');
 
 var storage = multer.diskStorage({
   destination: function destination(req, file, cb) {
@@ -51,7 +52,9 @@ module.exports = function (app) {
 
   app.post('/api/userupload', function (req, res, next) {
     // const { title, description } = req.body;
+    console.log(req);
     console.log(req.file);
+    console.log(req.body);
     // userUpload(req,res,function(err) {
     // 	if(err) {
     // 		return res.end('Error uploading file.');
@@ -67,6 +70,38 @@ module.exports = function (app) {
     // newFile.save();
     // res.send(newFile);
     // });
+  });
+
+  app.post('/api/media/:fileId', function (req, res) {
+    Uploads.findOne({ _id: req.params.fileId }, function (err, file) {
+      if (err) {
+        throw err;
+      };
+      fs.unlink(file.path, function (err) {
+        if (err) {
+          var stringErr = String(err);
+          if (stringErr.includes("no such file or directory")) {
+            file.remove();
+            return res.send({
+              deleted: true,
+              message: 'No file found, deleted record',
+              file: file
+            });
+          }
+          return res.send({
+            deleted: false,
+            message: 'File failed to delete'
+          });
+        } else {
+          file.remove();
+          res.send({
+            deleted: true,
+            message: 'File deleted successfully',
+            file: file
+          });
+        }
+      });
+    });
   });
 
   app.get('/api/media/all', function (req, res) {
