@@ -18,7 +18,8 @@ var teaSchema = new Schema({
     score: { type: Number, min: 0, max: 100 }
   }],
   health: [{ type: Schema.Types.ObjectId, ref: 'Health' }],
-  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  userImages: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }]
 });
 
 teaSchema.index({ title: 'text', description: 'text', category: 'text' });

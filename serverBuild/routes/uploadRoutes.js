@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Uploads = mongoose.model('Uploads');
 var multer = require('multer');
 var fs = require('fs');
+var Tea = mongoose.model('Tea');
 
 var storage = multer.diskStorage({
   destination: function destination(req, file, cb) {
@@ -22,6 +23,8 @@ var userStorage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
+
+var uploadUserImage = function uploadUserImage(req, res, callback) {};
 
 var upload = multer({ storage: storage }).single('file');
 var userUpload = multer({ storage: userStorage }).single('file');
@@ -50,26 +53,39 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/userupload', function (req, res, next) {
-    // const { title, description } = req.body;
-    console.log(req.file);
-    console.log(req.body);
-    res.send(req.file);
-    // userUpload(req,res,function(err) {
-    // 	if(err) {
-    // 		return res.end('Error uploading file.');
-    //
-    // 	}
-    // const { originalname, mimetype, path, size } = req.file;
-    // const newFile = new Uploads({
-    //   title: originalname,
-    //   path,
-    //   type: mimetype,
-    //   size
-    // })
-    // newFile.save();
-    // res.send(newFile);
-    // });
+  app.post('/api/userupload/tea', function (req, res, next) {
+    userUpload(req, res, function (err) {
+      if (err) {
+        return res.end('Error uploading file.');
+      }
+      console.log(req.body);
+      var _req$file2 = req.file,
+          path = _req$file2.path,
+          filename = _req$file2.filename,
+          size = _req$file2.size;
+      var _req$body = req.body,
+          timestamp = _req$body.timestamp,
+          latitude = _req$body.latitude,
+          longitude = _req$body.longitude;
+
+      var newUserFile = new Uploads({
+        title: filename,
+        path: path,
+        type: 'image',
+        size: size,
+        latitude: latitude,
+        longitude: longitude,
+        uploadDate: timestamp,
+        approved: false
+      });
+      console.log(newUserFile);
+      newUserFile.save();
+      Tea.findOne({ _id: req.body.teaId }, function (err, tea) {
+        tea.userImages.push(newUserFile);
+        tea.save();
+        console.log(tea);
+      });
+    });
   });
 
   app.post('/api/media/:fileId', function (req, res) {
