@@ -11,7 +11,7 @@ class Thumbnail extends Component {
     const { _id, title, path } = this.props.imageData;
     return (
       <div className="thumbnail">
-        <img src={`/uploads/${title}`} />
+        <img src={path} />
         <span>{title}</span>
         <button
           type="button"

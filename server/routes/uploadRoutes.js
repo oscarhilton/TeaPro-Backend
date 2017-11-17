@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Uploads = mongoose.model('Uploads');
 const multer = require('multer');
+const ImgurStorage = require('multer-storage-imgur');
 const fs = require('fs');
 const Tea = mongoose.model('Tea');
 
@@ -22,27 +23,29 @@ const userStorage = multer.diskStorage({
   }
 });
 
-const uploadUserImage = (req, res, callback) => {
-
-};
-
 var upload = multer({ storage : storage }).single('file');
 var userUpload = multer({ storage : userStorage }).single('file');
+var imgurUpload = multer({ storage: ImgurStorage({ clientId: 'e13776815032d0c' }) }).single('file');
 
 module.exports = app => {
   app.post('/api/upload', (req, res, next) => {
     // const { title, description } = req.body;
-    upload(req,res,function(err) {
+    imgurUpload(req,res,function(err) {
   		if(err) {
         console.log(err);
   			return res.end('Error uploading file.');
   		}
-      const { originalname, mimetype, path, size } = req.file;
+      console.log(req.file, '<<>>', req.body);
+      const { originalname, mimetype } = req.file;
+      const { link, datetime, size } = req.file.data;
       const newFile = new Uploads({
         title: originalname,
-        path,
+        path: link,
         type: mimetype,
-        size
+        size,
+        author: 'Admin',
+        approved: true,
+        uploadDate: datetime
       })
       newFile.save();
       res.send(newFile);
@@ -50,17 +53,19 @@ module.exports = app => {
   });
 
   app.post('/api/userupload/tea', (req, res, next) => {
-    userUpload(req,res,function(err) {
+    console.log('made it here');
+    imgurUpload(req,res,function(err) {
       if(err) {
+        console.log(err, ' error uploading');
         return res.end('Error uploading file.');
       }
-      console.log(req.body);
-      const { path, filename, size } = req.file;
+      const { originalname, mimetype } = req.file;
+      const { link, size } = req.file.data;
       const { timestamp, latitude, longitude } = req.body;
       const newUserFile = new Uploads({
-        title: filename,
-        path,
-        type: 'image',
+        title: originalname,
+        path: link,
+        type: mimetype,
         size,
         latitude,
         longitude,
