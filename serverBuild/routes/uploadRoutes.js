@@ -37,7 +37,7 @@ module.exports = function (app) {
         console.log(err);
         return res.end('Error uploading file.');
       }
-      console.log(req.file, '<<>>', req.body);
+      // console.log(req.file, '<<>>', req.body);
       var _req$file = req.file,
           originalname = _req$file.originalname,
           mimetype = _req$file.mimetype;
@@ -51,7 +51,6 @@ module.exports = function (app) {
         path: link,
         type: mimetype,
         size: size,
-        author: 'Admin',
         approved: true,
         uploadDate: datetime
       });

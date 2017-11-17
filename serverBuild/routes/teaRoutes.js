@@ -132,4 +132,18 @@ module.exports = function (app) {
       res.send({ teas: cat.teas });
     });
   });
+
+  app.get('/api/teas/:teaId/display', function (req, res) {
+    Tea.findOne({ _id: req.params.teaId }).populate({
+      path: 'reviews',
+      populate: {
+        path: 'author'
+      }
+    }).populate('category').populate('userImages').exec(function (err, tea) {
+      if (err) {
+        throw err;
+      };
+      res.send(tea);
+    });
+  });
 };
