@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var Uploads = mongoose.model('Uploads');
 var multer = require('multer');
+var ImgurStorage = require('multer-storage-imgur');
 var fs = require('fs');
 var Tea = mongoose.model('Tea');
 
@@ -24,30 +25,35 @@ var userStorage = multer.diskStorage({
   }
 });
 
-var uploadUserImage = function uploadUserImage(req, res, callback) {};
-
 var upload = multer({ storage: storage }).single('file');
 var userUpload = multer({ storage: userStorage }).single('file');
+var imgurUpload = multer({ storage: ImgurStorage({ clientId: 'e13776815032d0c' }) }).single('file');
 
 module.exports = function (app) {
   app.post('/api/upload', function (req, res, next) {
     // const { title, description } = req.body;
-    upload(req, res, function (err) {
+    imgurUpload(req, res, function (err) {
       if (err) {
         console.log(err);
         return res.end('Error uploading file.');
       }
+      console.log(req.file, '<<>>', req.body);
       var _req$file = req.file,
           originalname = _req$file.originalname,
-          mimetype = _req$file.mimetype,
-          path = _req$file.path,
-          size = _req$file.size;
+          mimetype = _req$file.mimetype;
+      var _req$file$data = req.file.data,
+          link = _req$file$data.link,
+          datetime = _req$file$data.datetime,
+          size = _req$file$data.size;
 
       var newFile = new Uploads({
         title: originalname,
-        path: path,
+        path: link,
         type: mimetype,
-        size: size
+        size: size,
+        author: 'Admin',
+        approved: true,
+        uploadDate: datetime
       });
       newFile.save();
       res.send(newFile);
@@ -55,24 +61,27 @@ module.exports = function (app) {
   });
 
   app.post('/api/userupload/tea', function (req, res, next) {
-    userUpload(req, res, function (err) {
+    console.log('made it here');
+    imgurUpload(req, res, function (err) {
       if (err) {
+        console.log(err, ' error uploading');
         return res.end('Error uploading file.');
       }
-      console.log(req.body);
       var _req$file2 = req.file,
-          path = _req$file2.path,
-          filename = _req$file2.filename,
-          size = _req$file2.size;
+          originalname = _req$file2.originalname,
+          mimetype = _req$file2.mimetype;
+      var _req$file$data2 = req.file.data,
+          link = _req$file$data2.link,
+          size = _req$file$data2.size;
       var _req$body = req.body,
           timestamp = _req$body.timestamp,
           latitude = _req$body.latitude,
           longitude = _req$body.longitude;
 
       var newUserFile = new Uploads({
-        title: filename,
-        path: path,
-        type: 'image',
+        title: originalname,
+        path: link,
+        type: mimetype,
         size: size,
         latitude: latitude,
         longitude: longitude,
