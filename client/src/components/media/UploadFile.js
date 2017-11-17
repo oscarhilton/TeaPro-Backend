@@ -19,12 +19,13 @@ class UploadFile extends Component {
     }
   }
   onChange(e) {
-    this.setState({file:e.target.files[0]})
+    this.setState({file:e.target.files[0]});
   }
   prepareUpload(file){
     const formData = new FormData();
     formData.append('file',file)
     this.props.uploadFile(formData);
+    this.setState({file: null});
   }
   render() {
     return (

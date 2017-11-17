@@ -35,7 +35,7 @@ module.exports = app => {
         console.log(err);
   			return res.end('Error uploading file.');
   		}
-      console.log(req.file, '<<>>', req.body);
+      // console.log(req.file, '<<>>', req.body);
       const { originalname, mimetype } = req.file;
       const { link, datetime, size } = req.file.data;
       const newFile = new Uploads({
@@ -43,10 +43,9 @@ module.exports = app => {
         path: link,
         type: mimetype,
         size,
-        author: 'Admin',
         approved: true,
         uploadDate: datetime
-      })
+      });
       newFile.save();
       res.send(newFile);
   	});

@@ -113,4 +113,20 @@ module.exports = app => {
     });
   });
 
+  app.get('/api/teas/:teaId/display', (req, res) => {
+    Tea.findOne({ _id: req.params.teaId })
+       .populate({
+         path: 'reviews',
+         populate: {
+           path: 'author'
+         }
+       })
+       .populate('category')
+       .populate('userImages')
+       .exec( (err, tea) => {
+          if (err) { throw err };
+          res.send(tea);
+        });
+  });
+
 };

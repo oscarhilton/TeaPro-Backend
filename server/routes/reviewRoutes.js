@@ -2,15 +2,23 @@ const mongoose = require('mongoose');
 const Review = mongoose.model('Review');
 const Tea = mongoose.model('Tea');
 
+// Tea.find({}, (err, teas) => {
+//   teas.forEach((tea) => {
+//     tea.reviews = [];
+//     tea.score = 0;
+//     tea.save();
+//   })
+// })
+
 module.exports = app => {
   app.post('/api/teas/:teaId/reviews/add/:userId', (req, res) => {
     Tea.findOne({ _id: req.params.teaId }, (err, tea) => {
-          const { newReview, userId } = req.body;
+          const { newReview } = req.body;
           const { titleText, bodyText, starCount } = newReview;
           const newReviewEntry = new Review({
             title: titleText,
             content: bodyText,
-            author: userId,
+            author: req.params.userId,
             rating: starCount,
             tea
           });
@@ -18,9 +26,19 @@ module.exports = app => {
           tea.reviews.push(newReviewEntry);
           const score = tea.score ? tea.score : 0;
           tea.score = score + starCount;
-          tea.save();
-          console.log('NEW REVIEW ', newReviewEntry, ' TO THIS TEA ', tea);
-          res.send(tea);
+          tea.save((err) => {
+            if (err) { throw err };
+            tea.populate({
+              path: 'reviews',
+              populate: {
+                path: 'author'
+              }
+            }, (err) => {
+              console.log(tea, 'TEAAAA');
+              res.send({ reviews: tea.reviews, score: tea.score });
+            });
+          });
+          // console.log('NEW REVIEW ', newReviewEntry, ' TO THIS TEA ', tea, ' BY THIS USER', req.params.userId);
     });
   });
 
