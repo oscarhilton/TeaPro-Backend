@@ -17,6 +17,7 @@ module.exports = function (app) {
   app.get('/api/category/all', function (req, res) {
     Category.find().populate({
       path: 'teas',
+      select: ['title', 'score', 'reviews', 'category'],
       populate: {
         path: 'category',
         select: 'background'
@@ -139,7 +140,10 @@ module.exports = function (app) {
       populate: {
         path: 'author'
       }
-    }).populate('category').populate('userImages').exec(function (err, tea) {
+    }).populate('category').populate({
+      path: 'userImages',
+      select: 'path'
+    }).exec(function (err, tea) {
       if (err) {
         throw err;
       };

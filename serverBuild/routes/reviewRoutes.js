@@ -4,13 +4,13 @@ var mongoose = require('mongoose');
 var Review = mongoose.model('Review');
 var Tea = mongoose.model('Tea');
 
-// Tea.find({}, (err, teas) => {
-//   teas.forEach((tea) => {
-//     tea.reviews = [];
-//     tea.score = 0;
-//     tea.save();
-//   })
-// })
+Review.find({}, function (err, review) {
+  review.forEach(function (review) {
+    review.upvotes = 0;
+    review.downvotes = 0;
+    review.save();
+  });
+});
 
 module.exports = function (app) {
   app.post('/api/teas/:teaId/reviews/add/:userId', function (req, res) {
