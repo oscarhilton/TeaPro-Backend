@@ -14,6 +14,7 @@ module.exports = app => {
     Category.find()
             .populate({
                        path: 'teas',
+                       select: ['title', 'score', 'reviews', 'category'],
                        populate: {
                          path: 'category',
                          select: 'background'
@@ -122,7 +123,10 @@ module.exports = app => {
          }
        })
        .populate('category')
-       .populate('userImages')
+       .populate({
+         path: 'userImages',
+         select: 'path'
+       })
        .exec( (err, tea) => {
           if (err) { throw err };
           res.send(tea);

@@ -70,13 +70,12 @@ module.exports = app => {
         longitude,
         uploadDate: timestamp,
         approved: false
-      })
-      console.log(newUserFile);
+      });
+      res.send(newUserFile);
       newUserFile.save();
       Tea.findOne({ _id: req.body.teaId }, (err, tea) => {
         tea.userImages.push(newUserFile);
         tea.save();
-        console.log(tea);
       });
     });
   });
