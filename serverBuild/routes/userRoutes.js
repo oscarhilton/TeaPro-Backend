@@ -131,39 +131,43 @@ module.exports = function (app) {
       if (err) {
         throw err;
       };
-      if (user.chosenCategories && user.chosenCategories.length > 0) {
-        (function () {
-          console.log('YES, CATS!');
-          var toSend = [];
+      if (user) {
+        if (user.chosenCategories && user.chosenCategories.length > 0) {
+          (function () {
+            console.log('YES, CATS!');
+            var toSend = [];
 
-          var _loop = function _loop(i) {
-            Category.findOne({ _id: user.chosenCategories[i] }).populate({
-              path: 'teas',
-              select: ['title', 'category', 'score', 'reviews'],
-              options: {
-                sort: {
-                  'score': -1
+            var _loop = function _loop(i) {
+              Category.findOne({ _id: user.chosenCategories[i] }).populate({
+                path: 'teas',
+                select: ['title', 'category', 'score', 'reviews'],
+                options: {
+                  sort: {
+                    'score': -1
+                  }
+                },
+                populate: {
+                  path: 'category',
+                  select: 'background'
                 }
-              },
-              populate: {
-                path: 'category',
-                select: 'background'
-              }
-            }).exec(function (err, cat) {
-              toSend.push(cat);
-              if (i === user.chosenCategories.length - 1) {
-                res.send(toSend);
-              }
-            });
-          };
+              }).exec(function (err, cat) {
+                toSend.push(cat);
+                if (i === user.chosenCategories.length - 1) {
+                  res.send(toSend);
+                }
+              });
+            };
 
-          for (var i = 0; i < user.chosenCategories.length; i++) {
-            _loop(i);
-          }
-        })();
+            for (var i = 0; i < user.chosenCategories.length; i++) {
+              _loop(i);
+            }
+          })();
+        } else {
+          console.log('NO, NO CATS!');
+          res.end();
+        }
       } else {
-        console.log('NO, NO CATS!');
-        res.end();
+        console.log('NO USER - WHY LOL!?');
       }
     });
   });

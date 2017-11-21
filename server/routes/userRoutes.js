@@ -116,34 +116,38 @@ module.exports = app => {
         })
         .exec((err, user) => {
           if (err) { throw err };
-          if (user.chosenCategories && user.chosenCategories.length > 0) {
-            console.log('YES, CATS!');
-            let toSend = [];
-            for (let i = 0; i < user.chosenCategories.length; i++) {
-              Category.findOne({ _id: user.chosenCategories[i] })
-                      .populate({
-                        path: 'teas',
-                        select: ['title', 'category', 'score', 'reviews'],
-                        options: {
-                          sort: {
-                            'score': -1
+          if (user) {
+            if (user.chosenCategories && user.chosenCategories.length > 0) {
+              console.log('YES, CATS!');
+              let toSend = [];
+              for (let i = 0; i < user.chosenCategories.length; i++) {
+                Category.findOne({ _id: user.chosenCategories[i] })
+                        .populate({
+                          path: 'teas',
+                          select: ['title', 'category', 'score', 'reviews'],
+                          options: {
+                            sort: {
+                              'score': -1
+                            }
+                          },
+                          populate: {
+                            path: 'category',
+                            select: 'background'
                           }
-                        },
-                        populate: {
-                          path: 'category',
-                          select: 'background'
-                        }
-                      })
-                      .exec((err, cat) => {
-                        toSend.push(cat);
-                        if (i === user.chosenCategories.length - 1) {
-                          res.send(toSend);
-                        }
-                      });
+                        })
+                        .exec((err, cat) => {
+                          toSend.push(cat);
+                          if (i === user.chosenCategories.length - 1) {
+                            res.send(toSend);
+                          }
+                        });
+              }
+            } else {
+              console.log('NO, NO CATS!');
+              res.end();
             }
           } else {
-            console.log('NO, NO CATS!');
-            res.end();
+            console.log('NO USER - WHY LOL!?')
           }
         });
   });
