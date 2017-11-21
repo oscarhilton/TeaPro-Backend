@@ -132,6 +132,12 @@ module.exports = function (app) {
         throw err;
       };
       // console.log(user);
+      if (user.chosenCategories) {
+        console.log('YES, CATS!');
+      } else {
+        console.log('NO, NO CATS!');
+        res.end();
+      }
       var toSend = [];
       console.log(user.chosenCategories.length);
 
