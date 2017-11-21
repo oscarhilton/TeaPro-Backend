@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Tea = mongoose.model('Tea');
+var Category = mongoose.model('Category');
 
 module.exports = function (app) {
   app.get('/api/test', function (req, res) {
@@ -55,12 +56,14 @@ module.exports = function (app) {
       user.chosenCategories = req.body.categories;
       user.save();
       res.end();
+      console.log(user);
     });
   });
 
   app.post('/api/user/:user/cupboard', function (req, res) {
-    User.findOne({ _id: req.params.user }).populate({
+    User.findOne({ _id: req.params.user }, 'cupboard').populate({
       path: 'cupboard',
+      select: ['title', 'category', 'score', 'reviews'],
       populate: {
         path: 'category',
         select: 'background'
@@ -70,6 +73,7 @@ module.exports = function (app) {
         throw err;console.log(err);
       };
       if (user) {
+        console.log(user);
         res.send(user.cupboard);
       } else {
         console.log('No user??');
@@ -118,11 +122,50 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/api/user/:user/discover', function (req, res) {
-    User.findOne({ _id: req.params.user }).populate('chosenCategories').populate('chosenMoods').exec(function (err, user) {
+  app.get('/api/user/:user/discover/categories', function (req, res) {
+    console.log('DISCOVER CATS');
+    User.findOne({ _id: req.params.user }, ['chosenCategories', 'chosenMoods']).populate({
+      path: 'chosenCategories',
+      select: 'title'
+    }).exec(function (err, user) {
       if (err) {
         throw err;
       };
+      // console.log(user);
+      var toSend = [];
+      console.log(user.chosenCategories.length);
+
+      var _loop = function _loop(i) {
+        Category.findOne({ _id: user.chosenCategories[i] }).populate({
+          path: 'teas',
+          select: ['title', 'category', 'score', 'reviews'],
+          options: {
+            sort: {
+              'score': -1
+            }
+          },
+          populate: {
+            path: 'category',
+            select: 'background'
+          }
+        }).exec(function (err, cat) {
+          toSend.push(cat);
+          if (i === user.chosenCategories.length - 1) {
+            console.log('DONE!');
+            console.log(toSend);
+            res.send(toSend);
+          }
+        });
+      };
+
+      for (var i = 0; i < user.chosenCategories.length; i++) {
+        _loop(i);
+      }
+    });
+  });
+
+  app.get('/api/user/view/:userId', function (req, res) {
+    User.findOne({ _id: req.params.userId }, ['name', 'avatar'], function (err, user) {
       console.log(user);
     });
   });
