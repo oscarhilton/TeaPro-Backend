@@ -117,6 +117,12 @@ module.exports = app => {
         .exec((err, user) => {
           if (err) { throw err };
           // console.log(user);
+          if (user.chosenCategories) {
+            console.log('YES, CATS!')
+          } else {
+            console.log('NO, NO CATS!');
+            res.end();
+          }
           let toSend = [];
           console.log(user.chosenCategories.length);
           for (let i = 0; i < user.chosenCategories.length; i++) {
