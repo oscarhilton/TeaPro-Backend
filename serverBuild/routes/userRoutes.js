@@ -131,41 +131,39 @@ module.exports = function (app) {
       if (err) {
         throw err;
       };
-      // console.log(user);
-      if (user.chosenCategories) {
-        console.log('YES, CATS!');
+      if (user.chosenCategories && user.chosenCategories.length > 0) {
+        (function () {
+          console.log('YES, CATS!');
+          var toSend = [];
+
+          var _loop = function _loop(i) {
+            Category.findOne({ _id: user.chosenCategories[i] }).populate({
+              path: 'teas',
+              select: ['title', 'category', 'score', 'reviews'],
+              options: {
+                sort: {
+                  'score': -1
+                }
+              },
+              populate: {
+                path: 'category',
+                select: 'background'
+              }
+            }).exec(function (err, cat) {
+              toSend.push(cat);
+              if (i === user.chosenCategories.length - 1) {
+                res.send(toSend);
+              }
+            });
+          };
+
+          for (var i = 0; i < user.chosenCategories.length; i++) {
+            _loop(i);
+          }
+        })();
       } else {
         console.log('NO, NO CATS!');
         res.end();
-      }
-      var toSend = [];
-      console.log(user.chosenCategories.length);
-
-      var _loop = function _loop(i) {
-        Category.findOne({ _id: user.chosenCategories[i] }).populate({
-          path: 'teas',
-          select: ['title', 'category', 'score', 'reviews'],
-          options: {
-            sort: {
-              'score': -1
-            }
-          },
-          populate: {
-            path: 'category',
-            select: 'background'
-          }
-        }).exec(function (err, cat) {
-          toSend.push(cat);
-          if (i === user.chosenCategories.length - 1) {
-            console.log('DONE!');
-            console.log(toSend);
-            res.send(toSend);
-          }
-        });
-      };
-
-      for (var i = 0; i < user.chosenCategories.length; i++) {
-        _loop(i);
       }
     });
   });

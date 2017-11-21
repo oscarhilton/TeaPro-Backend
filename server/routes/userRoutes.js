@@ -116,38 +116,34 @@ module.exports = app => {
         })
         .exec((err, user) => {
           if (err) { throw err };
-          // console.log(user);
-          if (user.chosenCategories) {
-            console.log('YES, CATS!')
+          if (user.chosenCategories && user.chosenCategories.length > 0) {
+            console.log('YES, CATS!');
+            let toSend = [];
+            for (let i = 0; i < user.chosenCategories.length; i++) {
+              Category.findOne({ _id: user.chosenCategories[i] })
+                      .populate({
+                        path: 'teas',
+                        select: ['title', 'category', 'score', 'reviews'],
+                        options: {
+                          sort: {
+                            'score': -1
+                          }
+                        },
+                        populate: {
+                          path: 'category',
+                          select: 'background'
+                        }
+                      })
+                      .exec((err, cat) => {
+                        toSend.push(cat);
+                        if (i === user.chosenCategories.length - 1) {
+                          res.send(toSend);
+                        }
+                      });
+            }
           } else {
             console.log('NO, NO CATS!');
             res.end();
-          }
-          let toSend = [];
-          console.log(user.chosenCategories.length);
-          for (let i = 0; i < user.chosenCategories.length; i++) {
-            Category.findOne({ _id: user.chosenCategories[i] })
-                    .populate({
-                      path: 'teas',
-                      select: ['title', 'category', 'score', 'reviews'],
-                      options: {
-                        sort: {
-                          'score': -1
-                        }
-                      },
-                      populate: {
-                        path: 'category',
-                        select: 'background'
-                      }
-                    })
-                    .exec((err, cat) => {
-                      toSend.push(cat);
-                      if (i === user.chosenCategories.length - 1) {
-                        console.log('DONE!');
-                        console.log(toSend);
-                        res.send(toSend);
-                      }
-                    });
           }
         });
   });
