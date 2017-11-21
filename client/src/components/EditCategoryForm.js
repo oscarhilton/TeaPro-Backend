@@ -10,7 +10,7 @@ class EditCategoryForm extends Component {
     super(props);
     this.state = {
       form: {
-        background: '',
+        background: this.props.background,
         image: ''
       }
     }

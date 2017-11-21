@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Review = mongoose.model('Review');
 const Tea = mongoose.model('Tea');
+const Comment = mongoose.model('Comment');
 
 Review.find({}, (err, review) => {
   review.forEach((review) => {
@@ -20,6 +21,9 @@ module.exports = app => {
             content: bodyText,
             author: req.params.userId,
             rating: starCount,
+            upvotes: 0,
+            downvotes: 0,
+            comments: [],
             tea
           });
           newReviewEntry.save();
@@ -53,13 +57,18 @@ module.exports = app => {
     });
   });
 
-  // app.get('/api/teas/:teaId/reviews/rating', (req, res) => {
-  //   Tea.findOne({ _id: req.params.teaId }, 'reviews')
-  //      .populate({ path: 'reviews',  populate: 'rating', select: 'rating' })
-  //      .exec((err, tea) => {
-  //        if (err) { throw err };
-  //        console.log(tea.rating, tea);
-  //        res.send(tea.rathing);
-  //      });
-  // });
+  app.post('/api/reviews/:reviewId/:comment/comments/:userId', (req, res) => {
+    Review.findOne({ _id: req.params.reviewId }, (err, review) => {
+      if (err) { throw err };
+      const newComment = new Comment({
+        author: req.params.userId,
+        comment: req.params.comment,
+        upvotes: 0,
+        downvotes: 0
+      })
+      review.comments.push(newComment);
+      review.save();
+      console.log(review);
+    });
+  });
 }

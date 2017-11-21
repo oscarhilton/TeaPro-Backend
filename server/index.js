@@ -12,6 +12,7 @@ require('./models/Category');
 require('./models/Reviews');
 require('./models/Moods');
 require('./models/Uploads');
+require('./models/Comment');
 
 require('./services/passport');
 

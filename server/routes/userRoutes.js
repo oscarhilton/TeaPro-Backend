@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Tea = mongoose.model('Tea');
+const Category = mongoose.model('Category');
 
 module.exports = app => {
   app.get('/api/test', (req, res) => {
@@ -47,12 +48,14 @@ module.exports = app => {
       user.chosenCategories = req.body.categories;
       user.save();
       res.end();
+      console.log(user);
     });
   });
 
   app.post('/api/user/:user/cupboard', (req, res) => {
-    User.findOne({ _id: req.params.user }).populate({
+    User.findOne({ _id: req.params.user }, 'cupboard').populate({
       path: 'cupboard',
+      select: ['title', 'category', 'score', 'reviews'],
       populate: {
         path: 'category',
         select: 'background'
@@ -60,6 +63,7 @@ module.exports = app => {
     }).exec( (err, user) => {
       if (err) { throw err; console.log(err) };
       if( user ){
+        console.log(user);
         res.send(user.cupboard);
       } else {
         console.log('No user??');
@@ -103,13 +107,48 @@ module.exports = app => {
   });
 
 
-  app.get('/api/user/:user/discover', (req, res) => {
-    User.findOne({ _id: req.params.user })
-        .populate('chosenCategories')
-        .populate('chosenMoods')
+  app.get('/api/user/:user/discover/categories', (req, res) => {
+    console.log('DISCOVER CATS');
+    User.findOne({ _id: req.params.user }, ['chosenCategories', 'chosenMoods'])
+        .populate({
+          path: 'chosenCategories',
+          select: 'title'
+        })
         .exec((err, user) => {
           if (err) { throw err };
-          console.log(user);
+          // console.log(user);
+          let toSend = [];
+          console.log(user.chosenCategories.length);
+          for (let i = 0; i < user.chosenCategories.length; i++) {
+            Category.findOne({ _id: user.chosenCategories[i] })
+                    .populate({
+                      path: 'teas',
+                      select: ['title', 'category', 'score', 'reviews'],
+                      options: {
+                        sort: {
+                          'score': -1
+                        }
+                      },
+                      populate: {
+                        path: 'category',
+                        select: 'background'
+                      }
+                    })
+                    .exec((err, cat) => {
+                      toSend.push(cat);
+                      if (i === user.chosenCategories.length - 1) {
+                        console.log('DONE!');
+                        console.log(toSend);
+                        res.send(toSend);
+                      }
+                    });
+          }
         });
+  });
+
+  app.get('/api/user/view/:userId', (req, res) => {
+    User.findOne({ _id: req.params.userId }, ['name', 'avatar'], (err, user) => {
+      console.log(user);
+    });
   });
 }

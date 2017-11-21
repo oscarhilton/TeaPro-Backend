@@ -10,13 +10,13 @@ class CategoryPage extends Component {
     this.props.getCategoryByName(this.props.match.params.title);
   }
   render() {
-    const { title, teas } = this.props.categories.selected;
+    const { title, teas, background } = this.props.categories.selected;
     return (
       <div className="container">
         <h2>{title}</h2>
         <div className="row">
           <div className="col">
-            <EditCategoryForm />
+            <EditCategoryForm background={background} />
           </div>
           <div className="col">
             <TeaForm />
