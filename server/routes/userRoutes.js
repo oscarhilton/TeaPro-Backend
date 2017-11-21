@@ -108,7 +108,7 @@ module.exports = app => {
 
 
   app.get('/api/user/:user/discover/categories', (req, res) => {
-    console.log('DISCOVER CATS');
+    console.log('DISCOVER CATS, WITH CHANGE!');
     User.findOne({ _id: req.params.user }, ['chosenCategories', 'chosenMoods'])
         .populate({
           path: 'chosenCategories',
