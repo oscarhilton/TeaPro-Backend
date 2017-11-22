@@ -53,6 +53,13 @@ module.exports = function (app) {
     });
   });
 
+  app.post('/api/reviews/:reviewId/upvote', function (req, res) {
+    Review.findOne({ _id: reviewId }, function (err, review) {
+      review.upvotes++;
+      review.save();
+    });
+  });
+
   app.post('/api/teas/:teaId/reviews/:reviewId/delete', function (req, res) {
     Review.findOne({ _id: reviewId }).remove().exec();
   });
