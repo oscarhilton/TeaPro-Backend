@@ -91,8 +91,8 @@ module.exports = app => {
     })
   });
 
-  app.post('/api/user/wishlist/get', (req, res) => {
-    User.findOne({ _id: req.body.userId }).populate({
+  app.get('/api/user/:userId/wishlist/get', (req, res) => {
+    User.findOne({ _id: req.params.userId }).populate({
       path: 'wishlist',
       populate: {
         path: 'category',
@@ -139,6 +139,7 @@ module.exports = app => {
                           toSend.push(cat);
                           if (i === user.chosenCategories.length - 1) {
                             res.send(toSend);
+                            console.log(toSend);
                           }
                         });
               }

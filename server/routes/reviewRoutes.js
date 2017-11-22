@@ -46,6 +46,13 @@ module.exports = app => {
     });
   });
 
+  app.post('/api/reviews/:reviewId/upvote', (req, res) => {
+    Review.findOne({ _id: reviewId }, (err, review) => {
+      review.upvotes++;
+      review.save();
+    });
+  })
+
   app.post('/api/teas/:teaId/reviews/:reviewId/delete', (req, res) => {
     Review.findOne({ _id: reviewId }).remove().exec();
   });
