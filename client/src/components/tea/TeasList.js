@@ -9,7 +9,6 @@ class TeasList extends Component {
   }
   render() {
     const teas = this.props.teas;
-    console.log(teas);
     return (
       <div>
         <h2>All Teas</h2>

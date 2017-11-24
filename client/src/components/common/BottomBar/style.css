@@ -1,0 +1,23 @@
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #f8f8f8;
+  border-top: solid thin #cccccc;
+  padding: 5px;
+  height: 45px;
+}
+
+.popup {
+  width: 300px;
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 9;
+}
+
+.popup-button {
+  float: right;
+  margin-right: 20px;
+}

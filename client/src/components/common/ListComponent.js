@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import TeaCard from '../TeaCard';
 
 class ListComponent extends Component {
   render() {
@@ -7,7 +6,7 @@ class ListComponent extends Component {
       <ul>
       {this.props.data.map(item =>
         <li className="list-group-item" key={item._id}>
-          <TeaCard tea={item} />
+          {this.props.children}
         </li>
       )}
       </ul>

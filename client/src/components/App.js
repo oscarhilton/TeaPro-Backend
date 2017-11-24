@@ -7,10 +7,9 @@ import '../style.css';
 
 import Header from './Header';
 import Dashboard from './Dashboard';
-import CategoryPage from './CategoryPage';
-import Moods from './moods/Moods';
+import CategoryPage from './categories/CategoryPage';
+import Moods from './moods/Moods/';
 import ShowMedia from './media/ShowMedia';
-// const ShowMedia = () => <h2>ShowMedia</h2>;
 const Landing = () => <h2>Landing</h2>;
 
 class App extends Component {

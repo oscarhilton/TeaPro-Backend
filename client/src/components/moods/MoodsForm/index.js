@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createMood } from '../../actions/moodsActions';
-import SelectFile from '../media/SelectFile';
+import { createMood } from '../../../actions/moodsActions';
+import SelectFile from '../../media/SelectFile';
 
 class MoodsForm extends Component {
   constructor(props) {
@@ -37,9 +37,15 @@ class MoodsForm extends Component {
 
   handleCreateMood(event) {
     event.preventDefault();
-    console.log(this.state);
     if (this.state.form.title.length > 1) {
       this.props.createMood(this.state.form);
+      this.setState({
+        form: {
+          title: '',
+          description: '',
+          image: ''
+        }
+      })
     }
   }
 
@@ -49,26 +55,34 @@ class MoodsForm extends Component {
       <form
         onSubmit={this.handleCreateMood.bind(this)}
       >
-        <input
-          type="text"
-          placeholder="Mood title"
-          onChange={this.handleChange.bind(this)}
-          name="title"
-          value={title}
-        />
-        <br/>
-        <textarea
-          type="text"
-          placeholder="description"
-          onChange={this.handleChange.bind(this)}
-          name="description"
-          value={description}
-        />
-        <br/>
-        <SelectFile
-          onChange={this.handleSelectFile.bind(this)}
-        />
-        <br/>
+        <div className="form-group">
+          <label for="title">Mood title</label>
+          <input
+            id="title"
+            type="text"
+            onChange={this.handleChange.bind(this)}
+            name="title"
+            value={title}
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <label for="description">Mood description</label>
+          <textarea
+            id="description"
+            type="text"
+            className="form-control"
+            onChange={this.handleChange.bind(this)}
+            name="description"
+            value={description}
+          />
+        </div>
+        <div className="form-group">
+          <label>Thumbnail</label>
+          <SelectFile
+            onChange={this.handleSelectFile.bind(this)}
+          />
+        </div>
         <button
           type="submit"
           className="btn btn-default"

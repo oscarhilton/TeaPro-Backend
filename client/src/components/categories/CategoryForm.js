@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { newCategory } from '../actions';
+import { newCategory } from '../../actions';
 
 class CategoryForm extends Component {
   constructor(props) {

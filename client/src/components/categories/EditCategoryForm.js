@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import SelectFile from './media/SelectFile';
+import SelectFile from '../media/SelectFile';
 import {
   editCategory
-} from '../actions';
+} from '../../actions';
 
 class EditCategoryForm extends Component {
   constructor(props) {

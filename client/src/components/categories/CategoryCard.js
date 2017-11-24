@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { deleteCategory } from '../actions';
+import { deleteCategory } from '../../actions';
 
 class TeaCard extends Component {
   handleDelete() {
