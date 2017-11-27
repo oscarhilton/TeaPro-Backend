@@ -7,7 +7,7 @@ class BottomBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayPopup: true
+      displayPopup: false
     };
   }
   handlePopupClick() {
@@ -23,6 +23,8 @@ class BottomBar extends Component {
     return null;
   }
   render() {
+    const showBackground = this.state.displayPopup ? 'show' : 'hide';
+    const buttonText = this.state.displayPopup ? 'close' : this.props.buttonText;
     return (
       <div className="bottom-bar">
         {this.renderPopup()}
@@ -30,9 +32,10 @@ class BottomBar extends Component {
           <Button
             onClick={this.handlePopupClick.bind(this)}
           >
-            {this.props.buttonText}
+            {buttonText}
           </Button>
         </div>
+        <div className={`background ${showBackground}`}></div>
       </div>
     );
   }

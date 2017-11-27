@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import './style.css';
 
-import TeaCard from './TeaCard';
+import TeaCard from '../TeaCard/';
 
 class TeasList extends Component {
   constructor(props) {
@@ -12,9 +13,9 @@ class TeasList extends Component {
     return (
       <div>
         <h2>All Teas</h2>
-        <ul>
+        <ul className="tea-list-ul">
           {Object.values(teas).map(tea =>
-            <li className="list-group-item" key={tea.title}>
+            <li key={tea.title} className="tea-list">
               <TeaCard tea={tea} />
             </li>
           )}

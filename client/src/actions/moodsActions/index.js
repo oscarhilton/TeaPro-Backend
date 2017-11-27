@@ -19,6 +19,7 @@ export const returnAllMoods = () => async dispatch => {
 
 export const createMood = (data) => async dispatch => {
   const res = await axios.post('/api/teas/moods/create', data);
+  console.log(res.data);
   dispatch({ type: CREATE_MOOD, payload: res.data });
 }
 

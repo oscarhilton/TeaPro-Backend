@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { newCategory } from '../../actions';
+import Pannel from '../common/Pannel';
 
 class CategoryForm extends Component {
   constructor(props) {
@@ -53,21 +54,27 @@ class CategoryForm extends Component {
 
   render() {
     return (
-      <form>
-        <input
-          placeholder="Category title"
-          value={this.state.form.title}
-          onChange={this.handleTitleChange.bind(this)}
-        />
-        <button
-          type="submit"
-          className="btn btn-default"
-          onClick={this.handleCreateCategory.bind(this)}
-        >
-        Create new category
-        </button>
-        {this.renderMessage()}
-      </form>
+      <Pannel>
+        <form>
+          <div className="form-group">
+            <label for="category-name">New category name</label>
+            <input
+              id="category-name"
+              placeholder="Category title"
+              value={this.state.form.title}
+              onChange={this.handleTitleChange.bind(this)}
+            />
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={this.handleCreateCategory.bind(this)}
+            >
+            Create new category
+            </button>
+            {this.renderMessage()}
+          </div>
+        </form>
+      </Pannel>
     );
   };
 };

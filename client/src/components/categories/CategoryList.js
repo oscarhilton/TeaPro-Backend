@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import CategoryCard from './CategoryCard';
+import CategoryCard from './CategoryCard/';
 
 class List extends Component {
   render() {
@@ -8,7 +8,7 @@ class List extends Component {
     return (
       <ul>
         {Object.values(this.props.categories.list).map(category =>
-          <li className="list-group-item" key={category.title}>
+          <li className="list-group-item" style={{ height: 50 }} key={category.title}>
             <CategoryCard category={category} />
           </li>
         )}

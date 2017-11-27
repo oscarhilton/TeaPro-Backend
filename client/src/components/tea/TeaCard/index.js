@@ -1,8 +1,10 @@
 import React from 'react';
+import './style.css';
 
 const TeaCard = ({ tea }) => {
+  const background = tea.category ? tea.category.background : '#212121';
   return (
-    <div className="Tea">
+    <div className="tea-card" style={{ background }}>
       <div className="tea_title">
         <span>
           {tea.title}
@@ -11,11 +13,6 @@ const TeaCard = ({ tea }) => {
       <div className="tea_score">
         <span>
           {tea.score}
-        </span>
-      </div>
-      <div className="tea_description">
-        <span>
-          {tea.description}
         </span>
       </div>
     </div>

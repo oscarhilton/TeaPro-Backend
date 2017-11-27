@@ -1,0 +1,11 @@
+.tea-card {
+  width: 100px;
+  min-height: 100px;
+  height: auto;
+  color: white;
+  line-height: 12px;
+  font-size: 12px;
+  border-radius: 5px;
+  padding: 8px;
+  margin: 2px;
+}

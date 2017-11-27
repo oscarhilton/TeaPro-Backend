@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import TeasList from './tea/TeasList';
+import TeasList from './tea/TeaList/';
 import Categories from './categories/Categories';
 
 class Dashboard extends Component {

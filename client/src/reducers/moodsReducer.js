@@ -1,6 +1,7 @@
 import {
   REQUEST_ALL_MOODS,
-  RETURN_ALL_MOODS
+  RETURN_ALL_MOODS,
+  CREATE_MOOD
 } from '../actions/moodsActions/types';
 
 const INITIAL_STATE = {
@@ -20,6 +21,11 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         loading: false,
         moods: action.payload
+      }
+    case CREATE_MOOD:
+      return {
+        ...state,
+        moods: [...state.moods, action.payload]
       }
     default:
       return state;
