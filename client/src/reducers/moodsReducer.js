@@ -4,6 +4,8 @@ import {
   CREATE_MOOD
 } from '../actions/moodsActions/types';
 
+import { sendNotification } from '../actions/notificationActions';
+
 const INITIAL_STATE = {
   loading: null,
   moods: []
@@ -23,6 +25,7 @@ export default function(state = INITIAL_STATE, action) {
         moods: action.payload
       }
     case CREATE_MOOD:
+      sendNotification('New mood created!');
       return {
         ...state,
         moods: [...state.moods, action.payload]

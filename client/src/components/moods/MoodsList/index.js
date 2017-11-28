@@ -20,9 +20,7 @@ class MoodsList extends Component {
 
     const moodsList =
           moods.map((mood) =>
-          <li className="mood-item">
-            <MoodCard title={mood.title} image={mood.image} />
-          </li>);
+          <MoodCard title={mood.title} image={mood.image} />);
 
     switch(loading) {
       case true:
@@ -40,8 +38,10 @@ class MoodsList extends Component {
 
   render() {
     return (
-      <div>
-        {this.renderMoods()}
+      <div className="row">
+        <div className="col-sm-6 col-md-6">
+          {this.renderMoods()}
+        </div>
       </div>
     );
   }

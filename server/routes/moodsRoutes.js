@@ -23,8 +23,13 @@ module.exports = app => {
         description,
         image
       });
-      newMood.save();
-      res.send(newMood);
+      newMood.save((err) => {
+        if(!err) {
+          newMood.populate('image', (err, mood) => {
+            res.send(newMood);
+          });
+        }
+      });
     });
 
 	});

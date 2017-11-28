@@ -6,12 +6,14 @@ import EditMood from '../EditMood/';
 
 const MoodCard = ({title, image}) => {
   console.log(title, image);
-  const showImage = image ? (<img src={`${image.path}`} />) : null;
+  const showImage = image ? (<img src={`${image.path}`} alt="{title}" />) : null;
   return (
-    <div className="container">
-      <div className="title"><p>{title}</p></div>
-      <div className="image">{showImage}</div>
-      <EditMood />
+    <div className="thumbnail">
+      {showImage}
+      <div className="caption">
+        <h5>{title}</h5>
+        <EditMood />
+      </div>
     </div>
   );
 }

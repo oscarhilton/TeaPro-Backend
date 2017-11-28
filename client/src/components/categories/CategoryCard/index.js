@@ -56,7 +56,9 @@ class TeaCard extends Component {
           >
             Edit
           </button>
-          {this.renderEditPopup()}
+          <div className="popup-anchor">
+            {this.renderEditPopup()}
+          </div>
         </div>
         <button
           className="pull-right btn btn-default"

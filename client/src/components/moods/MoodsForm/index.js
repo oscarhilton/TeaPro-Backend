@@ -51,6 +51,7 @@ class MoodsForm extends Component {
 
   render() {
     const { description, title, image } = this.state.form;
+    console.log(this.props.notifications);
     return (
       <form
         onSubmit={this.handleCreateMood.bind(this)}
@@ -94,8 +95,8 @@ class MoodsForm extends Component {
   };
 };
 
-const mapStateToProps = ({ moods }) => {
-  return { moods };
+const mapStateToProps = ({ moods, notifications }) => {
+  return { moods, notifications };
 }
 
 export default connect(mapStateToProps, { createMood })(MoodsForm);

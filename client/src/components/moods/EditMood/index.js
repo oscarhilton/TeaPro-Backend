@@ -17,7 +17,7 @@ class EditMood extends Component {
       )
     }
     return (
-      <div className="edit-button">
+      <div className="bla">
         <Button>
           Edit
         </Button>

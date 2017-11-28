@@ -13,10 +13,8 @@ class CategoryPage extends Component {
     return (
       <div className="">
         <h2>{title}</h2>
-        <div className="">
-          <div className="">
-            <EditCategoryForm background={background} />
-          </div>
+        <div className="popup-anchor">
+          <EditCategoryForm background={background} />
         </div>
         <ListComponent data={teas}>
         </ListComponent>
