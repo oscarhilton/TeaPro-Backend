@@ -31,8 +31,13 @@ module.exports = function (app) {
         description: description,
         image: image
       });
-      newMood.save();
-      res.send(newMood);
+      newMood.save(function (err) {
+        if (!err) {
+          newMood.populate('image', function (err, mood) {
+            res.send(newMood);
+          });
+        }
+      });
     });
   });
 
