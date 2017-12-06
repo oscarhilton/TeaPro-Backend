@@ -140,7 +140,7 @@ module.exports = function (app) {
       populate: {
         path: 'author'
       }
-    }).populate('category').populate({
+    }).populate('category').populate('moods.mood').populate({
       path: 'userImages',
       select: 'path'
     }).exec(function (err, tea) {

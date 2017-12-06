@@ -6,6 +6,7 @@ var multer = require('multer');
 var ImgurStorage = require('multer-storage-imgur');
 var fs = require('fs');
 var Tea = mongoose.model('Tea');
+var User = mongoose.model('User');
 
 var storage = multer.diskStorage({
   destination: function destination(req, file, cb) {
@@ -59,8 +60,7 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/api/userupload/tea', function (req, res, next) {
-    console.log('made it here');
+  app.post('/api/userupload/:userId/tea', function (req, res, next) {
     imgurUpload(req, res, function (err) {
       if (err) {
         console.log(err, ' error uploading');
@@ -85,13 +85,29 @@ module.exports = function (app) {
         latitude: latitude,
         longitude: longitude,
         uploadDate: timestamp,
-        approved: false
+        approved: false,
+        author: req.params.userId
       });
-      res.send(newUserFile);
-      newUserFile.save();
-      Tea.findOne({ _id: req.body.teaId }, function (err, tea) {
-        tea.userImages.push(newUserFile);
-        tea.save();
+      newUserFile.save(function (err, file) {
+        Tea.findOne({ _id: req.body.teaId }, function (err, tea) {
+          if (!tea) {
+            return res.send('No tea found - possible API conflict');
+          }
+          tea.userImages.push(file);
+          tea.save(function (err) {
+            console.log(tea, 'SAVED TEA');
+            console.log(file);
+            User.findOne({ _id: req.params.userId }, function (err, user) {
+              if (!user) {
+                console.log('NO USER!!!!! HELPPP!');
+                return res.send('No user found - possible API conflict');
+              }
+              user.images.push(file);
+              user.save();
+              res.send(file);
+            });
+          });
+        });
       });
     });
   });

@@ -136,6 +136,7 @@ module.exports = function (app) {
           (function () {
             console.log('YES, CATS!');
             var toSend = [];
+            console.log(user.chosenCategories.length, ' LENGTH');
 
             var _loop = function _loop(i) {
               Category.findOne({ _id: user.chosenCategories[i] }).populate({
@@ -154,7 +155,7 @@ module.exports = function (app) {
                 toSend.push(cat);
                 if (i === user.chosenCategories.length - 1) {
                   res.send(toSend);
-                  console.log(toSend);
+                  // console.log(toSend);
                 }
               });
             };
@@ -168,7 +169,7 @@ module.exports = function (app) {
           res.end();
         }
       } else {
-        console.log('NO USER - WHY LOL!?');
+        console.log('NO USER');
       }
     });
   });
@@ -176,6 +177,7 @@ module.exports = function (app) {
   app.get('/api/user/view/:userId', function (req, res) {
     User.findOne({ _id: req.params.userId }, ['name', 'avatar'], function (err, user) {
       console.log(user);
+      res.send(user);
     });
   });
 };

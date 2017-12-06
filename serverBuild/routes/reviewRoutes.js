@@ -4,14 +4,14 @@ var mongoose = require('mongoose');
 var Review = mongoose.model('Review');
 var Tea = mongoose.model('Tea');
 var Comment = mongoose.model('Comment');
+var User = mongoose.model('User');
 
-Review.find({}, function (err, review) {
-  review.forEach(function (review) {
-    review.upvotes = 0;
-    review.downvotes = 0;
-    review.save();
-  });
-});
+// Review.find({}, (err, review) => {
+//   review.forEach((review) => {
+//     review.createdAt = new Date();
+//     review.save();
+//   })
+// })
 
 module.exports = function (app) {
   app.post('/api/teas/:teaId/reviews/add/:userId', function (req, res) {
@@ -24,6 +24,7 @@ module.exports = function (app) {
       var newReviewEntry = new Review({
         title: titleText,
         content: bodyText,
+        createdAt: new Date(),
         author: req.params.userId,
         rating: starCount,
         upvotes: 0,
@@ -39,13 +40,23 @@ module.exports = function (app) {
         if (err) {
           throw err;
         };
+        User.findOne({ _id: req.params.userId }, function (err, user) {
+          if (err) {
+            throw err;
+          };
+          if (user) {
+            user.reviews.push(newReviewEntry);
+            console.log(user, 'SAVED USER!!');
+            user.save();
+          }
+        });
         tea.populate({
           path: 'reviews',
           populate: {
             path: 'author'
           }
         }, function (err) {
-          console.log(tea, 'TEAAAA');
+          // console.log(tea, 'TEAAAA');
           res.send({ reviews: tea.reviews, score: tea.score });
         });
       });
@@ -79,6 +90,8 @@ module.exports = function (app) {
       var newComment = new Comment({
         author: req.params.userId,
         comment: req.params.comment,
+        parent: reviewId,
+        createdAt: new Date(),
         upvotes: 0,
         downvotes: 0
       });

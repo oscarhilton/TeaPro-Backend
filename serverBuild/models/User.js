@@ -19,7 +19,8 @@ var userSchema = new Schema({
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
   chosenMoods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }],
   chosenCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
-  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  images: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }]
 });
 
 userSchema.statics.getCupboardTeas = function (text, cb) {
