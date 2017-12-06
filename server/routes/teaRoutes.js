@@ -123,6 +123,7 @@ module.exports = app => {
          }
        })
        .populate('category')
+       .populate('moods.mood')
        .populate({
          path: 'userImages',
          select: 'path'

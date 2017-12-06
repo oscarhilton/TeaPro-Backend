@@ -2,6 +2,20 @@ const mongoose = require('mongoose');
 const Moods = mongoose.model('Moods');
 const Tea = mongoose.model('Tea');
 
+
+// Moods.findOne({ title: 'Get sleepy' }, (err, mood) => {
+//   console.log(mood);
+//   Tea.find({}, (err, teas) => {
+//     teas.forEach((tea) => {
+//       tea.moods.push({
+//         mood,
+//         score: 30
+//       })
+//       tea.save();
+//     })
+//   })
+// })
+
 module.exports = app => {
   app.get('/api/moods/all', (req, res) => {
     Moods.find().populate('image').exec((err, moods) => {

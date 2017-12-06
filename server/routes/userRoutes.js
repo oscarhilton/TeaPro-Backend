@@ -120,6 +120,7 @@ module.exports = app => {
             if (user.chosenCategories && user.chosenCategories.length > 0) {
               console.log('YES, CATS!');
               let toSend = [];
+              console.log(user.chosenCategories.length, ' LENGTH');
               for (let i = 0; i < user.chosenCategories.length; i++) {
                 Category.findOne({ _id: user.chosenCategories[i] })
                         .populate({
@@ -139,7 +140,7 @@ module.exports = app => {
                           toSend.push(cat);
                           if (i === user.chosenCategories.length - 1) {
                             res.send(toSend);
-                            console.log(toSend);
+                            // console.log(toSend);
                           }
                         });
               }
@@ -148,7 +149,7 @@ module.exports = app => {
               res.end();
             }
           } else {
-            console.log('NO USER - WHY LOL!?')
+            console.log('NO USER')
           }
         });
   });
@@ -156,6 +157,8 @@ module.exports = app => {
   app.get('/api/user/view/:userId', (req, res) => {
     User.findOne({ _id: req.params.userId }, ['name', 'avatar'], (err, user) => {
       console.log(user);
+      res.send(user);
     });
   });
-}
+
+};

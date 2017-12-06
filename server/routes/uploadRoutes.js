@@ -4,6 +4,7 @@ const multer = require('multer');
 const ImgurStorage = require('multer-storage-imgur');
 const fs = require('fs');
 const Tea = mongoose.model('Tea');
+const User = mongoose.model('User');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -51,9 +52,8 @@ module.exports = app => {
   	});
   });
 
-  app.post('/api/userupload/tea', (req, res, next) => {
-    console.log('made it here');
-    imgurUpload(req,res,function(err) {
+  app.post('/api/userupload/:userId/tea', (req, res, next) => {
+    imgurUpload(req,res, (err) => {
       if(err) {
         console.log(err, ' error uploading');
         return res.end('Error uploading file.');
@@ -69,13 +69,29 @@ module.exports = app => {
         latitude,
         longitude,
         uploadDate: timestamp,
-        approved: false
+        approved: false,
+        author: req.params.userId
       });
-      res.send(newUserFile);
-      newUserFile.save();
-      Tea.findOne({ _id: req.body.teaId }, (err, tea) => {
-        tea.userImages.push(newUserFile);
-        tea.save();
+      newUserFile.save((err, file) => {
+        Tea.findOne({ _id: req.body.teaId }, (err, tea) => {
+          if (!tea) {
+            return res.send('No tea found - possible API conflict');
+          }
+          tea.userImages.push(file);
+          tea.save((err) => {
+            console.log(tea, 'SAVED TEA');
+            console.log(file);
+            User.findOne({ _id: req.params.userId }, (err, user) => {
+              if (!user) {
+                console.log('NO USER!!!!! HELPPP!')
+                return res.send('No user found - possible API conflict');
+              }
+              user.images.push(file);
+              user.save();
+              res.send(file);
+            });
+          });
+        });
       });
     });
   });
