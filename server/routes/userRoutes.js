@@ -3,6 +3,15 @@ const User = mongoose.model('User');
 const Tea = mongoose.model('Tea');
 const Category = mongoose.model('Category');
 
+User.find({}, (err, users) => {
+  users.forEach((user) => {
+    user.followers = [];
+    user.following = [];
+    user.save();
+  })
+  console.log('Users stripped of followers');
+});
+
 module.exports = app => {
   app.get('/api/test', (req, res) => {
     User.getCupboardTeas('some text', (err) => {
@@ -146,9 +155,39 @@ module.exports = app => {
   });
 
   app.get('/api/user/view/:userId', (req, res) => {
-    User.findOne({ _id: req.params.userId }, ['name', 'avatar'], (err, user) => {
+    User.findOne({ _id: req.params.userId }, ['name', 'avatar', 'followers', 'following'], (err, user) => {
       console.log(user);
       res.send(user);
+    });
+  });
+
+  app.post('/api/user/:userToFollow/follow', (req, res) => {
+    User.findOne({ _id: req.body.authUser }, (err, user) => {
+      if (err) { throw err };
+      if (user) {
+        const { userToFollow } = req.params;
+        if (user.following.indexOf(userToFollow) < 0) {
+          user.following.push(userToFollow);
+          user.save((err) => {
+            if (err) { throw err };
+            User.findOne({ _id: req.params.userToFollow }, (err, otherUser) => {
+              if (err) { throw err };
+              if (otherUser.followers.indexOf(user._id) < 0) {
+                otherUser.followers.push(user);
+                otherUser.save((err) => {
+                  if (err) { throw err };
+                  console.log('Success!');
+                  res.send('success');
+                })
+              } else {
+                console.log('ALREADY FOLLOWING')
+              }
+            });
+          });
+        } else {
+          console.log('ALREADY GOT ONE');
+        }
+      }
     });
   });
 

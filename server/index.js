@@ -62,11 +62,18 @@ function newConnection(socket) {
   console.log('NEW CONNECTON:  ');
   console.log(socket.id);
 
-  console.log('help me');
-
   socket.on('subscribe', function(room) {
       console.log('joining room', room);
       socket.join(room);
+  });
+
+  socket.on('new follower', function(user) {
+    console.log('new user follower', user, ' - FROM SOCKET!');
+    console.log(user.room);
+    console.log(user.follower);
+    io.sockets.emit(user.room).emit('incoming new follower', {
+        message: user.follower
+    });
   });
 
   socket.on('send message', function(data) {

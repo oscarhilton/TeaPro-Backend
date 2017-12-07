@@ -17,7 +17,9 @@ const userSchema = new Schema({
   chosenMoods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }],
   chosenCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
-  images: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }]
+  images: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }],
+  followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 
 userSchema.statics.getCupboardTeas = function(text, cb) {
