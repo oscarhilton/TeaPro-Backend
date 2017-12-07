@@ -56,7 +56,6 @@ module.exports = function (app) {
       user.chosenCategories = req.body.categories;
       user.save();
       res.end();
-      console.log(user);
     });
   });
 
@@ -73,7 +72,6 @@ module.exports = function (app) {
         throw err;console.log(err);
       };
       if (user) {
-        console.log(user);
         res.send(user.cupboard);
       } else {
         console.log('No user??');
@@ -87,10 +85,8 @@ module.exports = function (app) {
         throw err;
       };
       if (user) {
-        console.log(user.wishlist.indexOf(req.body.teaId));
         if (user.wishlist.indexOf(req.body.teaId) > -1) {
           res.send('Already got one');
-          console.log('Already got one');
         } else {
           Tea.findOne({ _id: req.body.teaId }, function (err, tea) {
             if (err) {
@@ -98,7 +94,6 @@ module.exports = function (app) {
             };
             user.wishlist.push(tea);
             user.save();
-            console.log("saved", user);
           });
         }
       };
@@ -123,7 +118,6 @@ module.exports = function (app) {
   });
 
   app.get('/api/user/:user/discover/categories', function (req, res) {
-    console.log('DISCOVER CATS, WITH CHANGE!');
     User.findOne({ _id: req.params.user }, ['chosenCategories', 'chosenMoods']).populate({
       path: 'chosenCategories',
       select: 'title'
@@ -134,9 +128,7 @@ module.exports = function (app) {
       if (user) {
         if (user.chosenCategories && user.chosenCategories.length > 0) {
           (function () {
-            console.log('YES, CATS!');
             var toSend = [];
-            console.log(user.chosenCategories.length, ' LENGTH');
 
             var _loop = function _loop(i) {
               Category.findOne({ _id: user.chosenCategories[i] }).populate({
@@ -165,7 +157,6 @@ module.exports = function (app) {
             }
           })();
         } else {
-          console.log('NO, NO CATS!');
           res.end();
         }
       } else {

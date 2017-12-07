@@ -46,7 +46,6 @@ module.exports = function (app) {
           };
           if (user) {
             user.reviews.push(newReviewEntry);
-            console.log(user, 'SAVED USER!!');
             user.save();
           }
         });
@@ -77,7 +76,6 @@ module.exports = function (app) {
 
   app.get('/api/teas/:teaId/reviews/all', function (req, res) {
     Tea.findOne({ _id: req.params.teaId }).populate('reviews').exec(function (err, tea) {
-      console.log(tea.reviews);
       res.send(tea.reviews);
     });
   });
@@ -97,7 +95,6 @@ module.exports = function (app) {
       });
       review.comments.push(newComment);
       review.save();
-      console.log(review);
     });
   });
 };

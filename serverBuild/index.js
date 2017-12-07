@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var cookieSession = require('cookie-session');
 var passport = require('passport');
 var bodyParser = require('body-parser');
+var socket = require('socket.io');
 
 var keys = require('./config/keys');
 
@@ -50,4 +51,28 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 var PORT = process.env.PORT || 5000;
-app.listen(PORT);
+var server = app.listen(PORT);
+
+var io = socket(server);
+
+io.sockets.on('connection', newConnection);
+
+function newConnection(socket) {
+  console.log('NEW CONNECTON:  ');
+  console.log(socket.id);
+
+  console.log('help me');
+
+  socket.on('subscribe', function (room) {
+    console.log('joining room', room);
+    socket.join(room);
+  });
+
+  socket.on('send message', function (data) {
+    console.log(data);
+    console.log('sending room post', data.room);
+    io.sockets.emit(data.room).emit('conversation private post', {
+      message: data.message
+    });
+  });
+}
