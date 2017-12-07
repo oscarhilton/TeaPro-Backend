@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
+const socket = require('socket.io');
 
 const keys = require('./config/keys');
 
@@ -19,6 +20,7 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
+
 
 // const populate = require('./populate');
 
@@ -50,4 +52,28 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT);
+const server = app.listen(PORT);
+
+const io = socket(server);
+
+io.sockets.on('connection', newConnection);
+
+function newConnection(socket) {
+  console.log('NEW CONNECTON:  ');
+  console.log(socket.id);
+
+  console.log('help me');
+
+  socket.on('subscribe', function(room) {
+      console.log('joining room', room);
+      socket.join(room);
+  });
+
+  socket.on('send message', function(data) {
+      console.log(data);
+      console.log('sending room post', data.room);
+      io.sockets.emit(data.room).emit('conversation private post', {
+          message: data.message
+      });
+  });
+}

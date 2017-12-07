@@ -48,7 +48,6 @@ module.exports = app => {
       user.chosenCategories = req.body.categories;
       user.save();
       res.end();
-      console.log(user);
     });
   });
 
@@ -63,7 +62,6 @@ module.exports = app => {
     }).exec( (err, user) => {
       if (err) { throw err; console.log(err) };
       if( user ){
-        console.log(user);
         res.send(user.cupboard);
       } else {
         console.log('No user??');
@@ -75,16 +73,13 @@ module.exports = app => {
     User.findOne({ _id: req.body.userId }, (err, user) => {
       if (err) { throw err };
       if (user) {
-        console.log(user.wishlist.indexOf(req.body.teaId));
         if (user.wishlist.indexOf(req.body.teaId) > -1) {
           res.send('Already got one');
-          console.log('Already got one');
         } else {
           Tea.findOne({ _id: req.body.teaId }, (err, tea) => {
             if (err) { throw err };
             user.wishlist.push(tea);
             user.save();
-            console.log("saved", user);
           });
         }
       };
@@ -108,7 +103,6 @@ module.exports = app => {
 
 
   app.get('/api/user/:user/discover/categories', (req, res) => {
-    console.log('DISCOVER CATS, WITH CHANGE!');
     User.findOne({ _id: req.params.user }, ['chosenCategories', 'chosenMoods'])
         .populate({
           path: 'chosenCategories',
@@ -118,9 +112,7 @@ module.exports = app => {
           if (err) { throw err };
           if (user) {
             if (user.chosenCategories && user.chosenCategories.length > 0) {
-              console.log('YES, CATS!');
               let toSend = [];
-              console.log(user.chosenCategories.length, ' LENGTH');
               for (let i = 0; i < user.chosenCategories.length; i++) {
                 Category.findOne({ _id: user.chosenCategories[i] })
                         .populate({
@@ -145,7 +137,6 @@ module.exports = app => {
                         });
               }
             } else {
-              console.log('NO, NO CATS!');
               res.end();
             }
           } else {

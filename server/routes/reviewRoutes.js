@@ -37,7 +37,6 @@ module.exports = app => {
               if (err) { throw err };
               if (user) {
                 user.reviews.push(newReviewEntry);
-                console.log(user, 'SAVED USER!!');
                 user.save();
               }
             })
@@ -68,7 +67,6 @@ module.exports = app => {
 
   app.get('/api/teas/:teaId/reviews/all', (req, res) => {
     Tea.findOne({ _id: req.params.teaId }).populate('reviews').exec( (err, tea) => {
-      console.log(tea.reviews);
       res.send(tea.reviews);
     });
   });
@@ -86,7 +84,6 @@ module.exports = app => {
       })
       review.comments.push(newComment);
       review.save();
-      console.log(review);
     });
   });
 }
