@@ -54,7 +54,7 @@ if (process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
 
-const io = socket(server);
+const io = socket(server, {pingTimeout: 30000});
 
 io.sockets.on('connection', newConnection);
 
