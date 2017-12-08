@@ -70,9 +70,9 @@ function newConnection(socket) {
   socket.on('new follower', function(user) {
     console.log('new user follower', user, ' - FROM SOCKET!');
     console.log(user.room);
-    console.log(user.follower);
+    console.log(user.message);
     io.sockets.emit(user.room).emit('incoming new follower', {
-        message: user.follower
+        message: user.message
     });
   });
 
