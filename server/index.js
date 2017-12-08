@@ -78,6 +78,7 @@ function newConnection(socket) {
 
   socket.on('send message', function(data) {
       console.log(data);
+      console.log('hello');
       console.log('sending room post', data.room);
       io.sockets.emit(data.room).emit('conversation private post', {
           message: data.message

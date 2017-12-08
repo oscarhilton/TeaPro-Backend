@@ -5,6 +5,15 @@ var User = mongoose.model('User');
 var Tea = mongoose.model('Tea');
 var Category = mongoose.model('Category');
 
+User.find({}, function (err, users) {
+  users.forEach(function (user) {
+    user.followers = [];
+    user.following = [];
+    user.save();
+  });
+  console.log('Users stripped of followers');
+});
+
 module.exports = function (app) {
   app.get('/api/test', function (req, res) {
     User.getCupboardTeas('some text', function (err) {
@@ -166,9 +175,48 @@ module.exports = function (app) {
   });
 
   app.get('/api/user/view/:userId', function (req, res) {
-    User.findOne({ _id: req.params.userId }, ['name', 'avatar'], function (err, user) {
+    User.findOne({ _id: req.params.userId }, ['name', 'avatar', 'followers', 'following'], function (err, user) {
       console.log(user);
       res.send(user);
+    });
+  });
+
+  app.post('/api/user/:userToFollow/follow', function (req, res) {
+    User.findOne({ _id: req.body.authUser }, function (err, user) {
+      if (err) {
+        throw err;
+      };
+      if (user) {
+        var userToFollow = req.params.userToFollow;
+
+        if (user.following.indexOf(userToFollow) < 0) {
+          user.following.push(userToFollow);
+          user.save(function (err) {
+            if (err) {
+              throw err;
+            };
+            User.findOne({ _id: req.params.userToFollow }, function (err, otherUser) {
+              if (err) {
+                throw err;
+              };
+              if (otherUser.followers.indexOf(user._id) < 0) {
+                otherUser.followers.push(user);
+                otherUser.save(function (err) {
+                  if (err) {
+                    throw err;
+                  };
+                  console.log('Success!');
+                  res.send('success');
+                });
+              } else {
+                console.log('ALREADY FOLLOWING');
+              }
+            });
+          });
+        } else {
+          console.log('ALREADY GOT ONE');
+        }
+      }
     });
   });
 };

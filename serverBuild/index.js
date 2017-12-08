@@ -61,15 +61,23 @@ function newConnection(socket) {
   console.log('NEW CONNECTON:  ');
   console.log(socket.id);
 
-  console.log('help me');
-
   socket.on('subscribe', function (room) {
     console.log('joining room', room);
     socket.join(room);
   });
 
+  socket.on('new follower', function (user) {
+    console.log('new user follower', user, ' - FROM SOCKET!');
+    console.log(user.room);
+    console.log(user.message);
+    io.sockets.emit(user.room).emit('incoming new follower', {
+      message: user.message
+    });
+  });
+
   socket.on('send message', function (data) {
     console.log(data);
+    console.log('hello');
     console.log('sending room post', data.room);
     io.sockets.emit(data.room).emit('conversation private post', {
       message: data.message
