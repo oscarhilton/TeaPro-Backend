@@ -71,7 +71,7 @@ function newConnection(socket) {
     console.log('new user follower', user, ' - FROM SOCKET!');
     console.log(user.room);
     console.log(user.message);
-    io.sockets.emit(user.room).emit('incoming new follower', {
+    socket.broadcast.to(user.room).emit('incoming new follower', {
         message: user.message
     });
   });
@@ -80,7 +80,7 @@ function newConnection(socket) {
       console.log(data);
       console.log('hello');
       console.log('sending room post', data.room);
-      io.sockets.emit(data.room).emit('conversation private post', {
+      socket.broadcast.to(data.room).emit('conversation private post', {
           message: data.message
       });
   });
