@@ -53,7 +53,7 @@ if (process.env.NODE_ENV === 'production') {
 var PORT = process.env.PORT || 5000;
 var server = app.listen(PORT);
 
-var io = socket(server);
+var io = socket(server, { pingTimeout: 30000 });
 
 io.sockets.on('connection', newConnection);
 
