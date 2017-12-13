@@ -5,11 +5,10 @@ const Category = mongoose.model('Category');
 
 User.find({}, (err, users) => {
   users.forEach((user) => {
-    user.followers = [];
-    user.following = [];
+    user.profileBio = 'I love tea! Tea is life!';
     user.save();
   })
-  console.log('Users stripped of followers');
+  console.log('Updated Bios');
 });
 
 module.exports = app => {
@@ -63,7 +62,7 @@ module.exports = app => {
   app.post('/api/user/:user/cupboard', (req, res) => {
     User.findOne({ _id: req.params.user }, 'cupboard').populate({
       path: 'cupboard',
-      select: ['title', 'category', 'score', 'reviews'],
+      select: ['title', 'category', 'score', 'reviews', 'flavoured', 'following'],
       populate: {
         path: 'category',
         select: 'background'
@@ -113,45 +112,35 @@ module.exports = app => {
 
   app.get('/api/user/:user/discover/categories', (req, res) => {
     User.findOne({ _id: req.params.user }, ['chosenCategories', 'chosenMoods'])
-        .populate({
-          path: 'chosenCategories',
-          select: 'title'
-        })
         .exec((err, user) => {
           if (err) { throw err };
           if (user) {
             if (user.chosenCategories && user.chosenCategories.length > 0) {
-              let toSend = [];
-              for (let i = 0; i < user.chosenCategories.length; i++) {
-                Category.findOne({ _id: user.chosenCategories[i] })
-                        .populate({
-                          path: 'teas',
-                          select: ['title', 'category', 'score', 'reviews'],
-                          options: {
-                            sort: {
-                              'score': -1
-                            }
-                          },
-                          populate: {
-                            path: 'category',
-                            select: 'background'
-                          }
-                        })
-                        .exec((err, cat) => {
-                          toSend.push(cat);
-                          if (i === user.chosenCategories.length - 1) {
-                            res.send(toSend);
-                            // console.log(toSend);
-                          }
-                        });
-              }
-            } else {
-              res.end();
-            }
+              Category.find({ _id: { $in: user.chosenCategories } })
+              .populate({
+                path: 'teas',
+                select: ['title', 'category', 'score', 'reviews'],
+                options: {
+                  sort: {
+                    'score': -1
+                  }
+                },
+                populate: {
+                  path: 'category',
+                  select: 'background'
+                }
+              })
+              .exec((err, cats) => {
+                if (err) { throw err };
+                if (cats) {
+                  res.send(cats);
+                }
+              });
           } else {
             console.log('NO USER')
           }
-        });
+        };
+    });
   });
 
   app.get('/api/user/view/:userId', (req, res) => {
