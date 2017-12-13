@@ -7,11 +7,10 @@ var Category = mongoose.model('Category');
 
 User.find({}, function (err, users) {
   users.forEach(function (user) {
-    user.followers = [];
-    user.following = [];
+    user.profileBio = 'I love tea! Tea is life!';
     user.save();
   });
-  console.log('Users stripped of followers');
+  console.log('Updated Bios');
 });
 
 module.exports = function (app) {
@@ -71,7 +70,7 @@ module.exports = function (app) {
   app.post('/api/user/:user/cupboard', function (req, res) {
     User.findOne({ _id: req.params.user }, 'cupboard').populate({
       path: 'cupboard',
-      select: ['title', 'category', 'score', 'reviews'],
+      select: ['title', 'category', 'score', 'reviews', 'flavoured', 'following'],
       populate: {
         path: 'category',
         select: 'background'
@@ -127,50 +126,36 @@ module.exports = function (app) {
   });
 
   app.get('/api/user/:user/discover/categories', function (req, res) {
-    User.findOne({ _id: req.params.user }, ['chosenCategories', 'chosenMoods']).populate({
-      path: 'chosenCategories',
-      select: 'title'
-    }).exec(function (err, user) {
+    User.findOne({ _id: req.params.user }, ['chosenCategories', 'chosenMoods']).exec(function (err, user) {
       if (err) {
         throw err;
       };
       if (user) {
         if (user.chosenCategories && user.chosenCategories.length > 0) {
-          (function () {
-            var toSend = [];
-
-            var _loop = function _loop(i) {
-              Category.findOne({ _id: user.chosenCategories[i] }).populate({
-                path: 'teas',
-                select: ['title', 'category', 'score', 'reviews'],
-                options: {
-                  sort: {
-                    'score': -1
-                  }
-                },
-                populate: {
-                  path: 'category',
-                  select: 'background'
-                }
-              }).exec(function (err, cat) {
-                toSend.push(cat);
-                if (i === user.chosenCategories.length - 1) {
-                  res.send(toSend);
-                  // console.log(toSend);
-                }
-              });
-            };
-
-            for (var i = 0; i < user.chosenCategories.length; i++) {
-              _loop(i);
+          Category.find({ _id: { $in: user.chosenCategories } }).populate({
+            path: 'teas',
+            select: ['title', 'category', 'score', 'reviews'],
+            options: {
+              sort: {
+                'score': -1
+              }
+            },
+            populate: {
+              path: 'category',
+              select: 'background'
             }
-          })();
+          }).exec(function (err, cats) {
+            if (err) {
+              throw err;
+            };
+            if (cats) {
+              res.send(cats);
+            }
+          });
         } else {
-          res.end();
+          console.log('NO USER');
         }
-      } else {
-        console.log('NO USER');
-      }
+      };
     });
   });
 
