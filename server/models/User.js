@@ -31,7 +31,8 @@ userSchema.statics.checkOnBoarding = function(id, cb) {
   this.findOne({ _id: id }, (err, user) => {
     const chosenMoods = user.chosenMoods.length;
     const chosenCategories = user.chosenCategories.length;
-    if (chosenMoods > 0 && chosenCategories > 0) {
+    console.log(chosenCategories > 0);
+    if (chosenCategories > 0 || chosenMoods > 0) {
       return cb(true);
     } else {
       return cb(false);
