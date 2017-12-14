@@ -54,6 +54,7 @@ module.exports = function (app) {
 
   app.get('/api/user/:user/onboardstatus', function (req, res) {
     User.checkOnBoarding(req.params.user, function (onBoard) {
+      console.log(onBoard);
       res.send(onBoard);
     });
   });
@@ -201,6 +202,17 @@ module.exports = function (app) {
         } else {
           console.log('ALREADY GOT ONE');
         }
+      }
+    });
+  });
+
+  app.post('/api/users', function (req, res) {
+    User.find({ _id: { $in: req.body.userList } }, ['name', 'avatar'], function (err, users) {
+      if (err) {
+        throw err;
+      };
+      if (users) {
+        res.send(users);
       }
     });
   });
