@@ -17,6 +17,7 @@ const userSchema = new Schema({
   chosenMoods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }],
   chosenCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  posts: [{ type: Schema.Types.ObjectId, ref: 'UserPost' }],
   images: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }],
   followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   following: [{ type: Schema.Types.ObjectId, ref: 'User' }],

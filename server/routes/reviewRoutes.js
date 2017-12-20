@@ -25,6 +25,7 @@ module.exports = app => {
             upvotes: 0,
             downvotes: 0,
             comments: [],
+            // TODO: NEED TO UPLOAD IMAGE WITH THE REVIEW <----- !!!!
             tea
           });
           newReviewEntry.save();
@@ -71,12 +72,12 @@ module.exports = app => {
     });
   });
 
-  app.post('/api/reviews/:reviewId/:comment/comments/:userId', (req, res) => {
+  app.post('/api/reviews/:reviewId/comments', (req, res) => {
     Review.findOne({ _id: req.params.reviewId }, (err, review) => {
       if (err) { throw err };
       const newComment = new Comment({
-        author: req.params.userId,
-        comment: req.params.comment,
+        author: req.body.userId,
+        content: req.body.content,
         parent: reviewId,
         createdAt: new Date(),
         upvotes: 0,

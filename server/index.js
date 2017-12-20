@@ -5,16 +5,21 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
 
+// Config
 const keys = require('./config/keys');
 
+// Mongoose models
 require('./models/User');
 require('./models/Tea');
 require('./models/Category');
 require('./models/Reviews');
+require('./models/UserPosts');
 require('./models/Moods');
 require('./models/Uploads');
 require('./models/Comment');
+require('./models/Notifications');
 
+// Passport
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
@@ -41,6 +46,7 @@ require('./routes/searchRoutes')(app);
 require('./routes/teaRoutes')(app);
 require('./routes/uploadRoutes')(app);
 require('./routes/userRoutes')(app);
+require('./routes/userPostRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
@@ -54,7 +60,7 @@ if (process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT);
 
-const io = socket(server, {pingTimeout: 30000});
+const io = socket(server);
 
 io.sockets.on('connection', newConnection);
 

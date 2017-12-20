@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Tea = mongoose.model('Tea');
 const Category = mongoose.model('Category');
+const Notification = mongoose.model('Notification');
 
 User.find({}, (err, users) => {
   users.forEach((user) => {
@@ -27,6 +28,15 @@ module.exports = app => {
     });
   });
 
+  app.get('/api/user/:user/notifications', (req, res) => {
+    Notification.find({ user: { $in: req.params.user }})
+                .sort({ timestamp: -1})
+                .exec((err, notes) => {
+                  if (err) { throw err };
+                  res.send(notes);
+                });
+  });
+
   app.post('/api/user/:user/cupboard/add/:teaId', (req, res) => {
     User.findOne({ _id: req.params.user }, (err, user) => {
       if (err) { throw err };
@@ -37,7 +47,22 @@ module.exports = app => {
           Tea.findOne({ _id: req.params.teaId }, (err, tea) => {
             if (err) { throw err };
             user.cupboard.push(tea);
-            user.save();
+            user.save((err) => {
+              if (!err) {
+                const note = new Notification({
+                  message: `You added ${req.body.teaTitle} to your cupboard`,
+                  timestamp: new Date(),
+                  reference: tea._id,
+                  user: user._id
+                });
+                note.save((err) => {
+                  if (!err) {
+                    console.log(note);
+                    res.send(note);
+                  }
+                });
+              }
+            });
           });
         }
       };
