@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 
 var commentSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: 'User' },
+  content: String,
   createdAt: { type: Date, default: Date.now },
   upvotes: { type: Number, default: 0 },
   downvotes: { type: Number, default: 0 },

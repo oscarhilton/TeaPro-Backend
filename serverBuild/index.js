@@ -7,16 +7,21 @@ var passport = require('passport');
 var bodyParser = require('body-parser');
 var socket = require('socket.io');
 
+// Config
 var keys = require('./config/keys');
 
+// Mongoose models
 require('./models/User');
 require('./models/Tea');
 require('./models/Category');
 require('./models/Reviews');
+require('./models/UserPosts');
 require('./models/Moods');
 require('./models/Uploads');
 require('./models/Comment');
+require('./models/Notifications');
 
+// Passport
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
@@ -40,6 +45,7 @@ require('./routes/searchRoutes')(app);
 require('./routes/teaRoutes')(app);
 require('./routes/uploadRoutes')(app);
 require('./routes/userRoutes')(app);
+require('./routes/userPostRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
@@ -53,7 +59,7 @@ if (process.env.NODE_ENV === 'production') {
 var PORT = process.env.PORT || 5000;
 var server = app.listen(PORT);
 
-var io = socket(server, { pingTimeout: 30000 });
+var io = socket(server);
 
 io.sockets.on('connection', newConnection);
 
