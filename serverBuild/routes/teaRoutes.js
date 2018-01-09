@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var Category = mongoose.model('Category');
 var Tea = mongoose.model('Tea');
+var Collection = mongoose.model('Collection');
 
 module.exports = function (app) {
   app.get('/api/teas/all', function (req, res) {
@@ -148,6 +149,27 @@ module.exports = function (app) {
         throw err;
       };
       res.send(tea);
+    });
+  });
+
+  // app.post('/api/teas/collections', (req, res) => {
+  //
+  // });
+
+  app.get('/api/teas/collections/:id', function (req, res) {
+    Collection.find({ id: req.params.id }).populate({
+      path: 'teas',
+      select: ['title', 'score', 'reviews', 'category'],
+      populate: {
+        path: 'category',
+        select: 'background'
+      }
+    }).exec(function (err, col) {
+      if (err) {
+        throw err;
+      };
+      console.log(col);
+      res.send(col);
     });
   });
 };

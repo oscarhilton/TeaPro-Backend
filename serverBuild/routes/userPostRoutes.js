@@ -25,14 +25,14 @@ module.exports = function (app) {
   });
 
   app.get('/api/user/posts/hot', function (req, res) {
-    Post.find().populate({ path: 'author', select: 'name' }).sort({ upvotes: -1 }).limit(3).exec(function (err, posts) {
+    Post.find().populate({ path: 'author', select: ['name', 'avatar'] }).sort({ upvotes: -1 }).limit(3).exec(function (err, posts) {
       res.send(posts);
     });
   });
 
   app.post('/api/user/posts', function (req, res) {
     console.log(req.body);
-    Post.find({ author: { $in: req.body.followers } }).populate({ path: 'author', select: 'name' }).sort({ createdAt: -1 }).limit(3).exec(function (err, posts) {
+    Post.find({ author: { $in: req.body.followers } }).populate({ path: 'author', select: ['name', 'avatar'] }).sort({ createdAt: -1 }).limit(3).exec(function (err, posts) {
       res.send(posts);
     });
   });
