@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Category = mongoose.model('Category');
 const Tea = mongoose.model('Tea');
+const Collection = mongoose.model('Collection');
 
 module.exports = app => {
   app.get('/api/teas/all', (req, res) => {
@@ -13,13 +14,13 @@ module.exports = app => {
   app.get('/api/category/all', (req, res) => {
     Category.find()
             .populate({
-                       path: 'teas',
-                       select: ['title', 'score', 'reviews', 'category'],
-                       populate: {
-                         path: 'category',
-                         select: 'background'
-                       }
-                     })
+               path: 'teas',
+               select: ['title', 'score', 'reviews', 'category'],
+               populate: {
+                 path: 'category',
+                 select: 'background'
+               }
+             })
             .populate('image')
             .exec((err, cats) => {
               if (err) { throw err; };
@@ -28,9 +29,10 @@ module.exports = app => {
   });
 
   app.get('/api/category/:title', (req, res) => {
-    Category.findOne({ title: req.params.title }).populate('teas').exec( (err, cat) => {
-      res.send({ cat });
-    });
+    Category.findOne({ title: req.params.title })
+            .populate('teas').exec( (err, cat) => {
+              res.send({ cat });
+            });
   })
 
   app.post('/api/category/edit/:id', (req, res) => {
@@ -101,17 +103,19 @@ module.exports = app => {
   });
 
   app.get('/api/teas/:teaId/category', (req, res) => {
-    Tea.findOne({ _id: req.params.teaId }).populate('category', 'background').exec( (err, tea) => {
-      if (err) { throw err };
-      res.send({ category: tea.category.title });
-    });
+    Tea.findOne({ _id: req.params.teaId })
+        .populate('category', 'background').exec( (err, tea) => {
+            if (err) { throw err };
+            res.send({ category: tea.category.title });
+          });
   });
 
   app.get('/api/category/:catId/teas', (req, res) => {
-    Category.findOne({ _id: req.params.catId }).populate('tea').exec( (err, cat) => {
-      if (err) { throw err };
-      res.send({ teas: cat.teas })
-    });
+    Category.findOne({ _id: req.params.catId })
+            .populate('tea').exec( (err, cat) => {
+                      if (err) { throw err };
+                      res.send({ teas: cat.teas })
+                    });
   });
 
   app.get('/api/teas/:teaId/display', (req, res) => {
@@ -132,6 +136,27 @@ module.exports = app => {
           if (err) { throw err };
           res.send(tea);
         });
+  });
+
+  // app.post('/api/teas/collections', (req, res) => {
+  //
+  // });
+
+  app.get('/api/teas/collections/:id', (req, res) => {
+    Collection.find({ id: req.params.id })
+              .populate({
+                 path: 'teas',
+                 select: ['title', 'score', 'reviews', 'category'],
+                 populate: {
+                   path: 'category',
+                   select: 'background'
+                 }
+               })
+              .exec((err, col) => {
+                if (err) { throw err };
+                console.log(col);
+                res.send(col);
+              });
   });
 
 };

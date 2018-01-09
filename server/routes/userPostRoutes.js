@@ -23,7 +23,7 @@ module.exports = app => {
 
   app.get('/api/user/posts/hot', (req, res) => {
     Post.find()
-        .populate({ path: 'author', select: 'name' })
+        .populate({ path: 'author', select: ['name', 'avatar'] })
         .sort({ upvotes: -1 })
         .limit(3)
         .exec((err, posts) => {
@@ -34,7 +34,7 @@ module.exports = app => {
   app.post('/api/user/posts', (req, res) => {
     console.log(req.body);
     Post.find({ author: { $in: req.body.followers }})
-        .populate({ path: 'author', select: 'name' })
+        .populate({ path: 'author', select: ['name', 'avatar'] })
         .sort({ createdAt: -1 })
         .limit(3)
         .exec((err, posts) => {

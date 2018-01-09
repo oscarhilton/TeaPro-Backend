@@ -18,6 +18,7 @@ require('./models/Moods');
 require('./models/Uploads');
 require('./models/Comment');
 require('./models/Notifications');
+require('./models/Collections');
 
 // Passport
 require('./services/passport');
