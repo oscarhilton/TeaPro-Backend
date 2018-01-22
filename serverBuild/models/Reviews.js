@@ -13,7 +13,8 @@ var reviewSchema = new Schema({
   tea: { type: Schema.Types.ObjectId, ref: 'Tea' },
   upvotes: { type: Number, default: 0 },
   downvotes: { type: Number, default: 0 },
-  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+  image: { type: Schema.Types.ObjectId, ref: 'Uploads' }
 });
 
 mongoose.model('Review', reviewSchema);

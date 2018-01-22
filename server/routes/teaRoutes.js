@@ -30,7 +30,15 @@ module.exports = app => {
 
   app.get('/api/category/:title', (req, res) => {
     Category.findOne({ title: req.params.title })
-            .populate('teas').exec( (err, cat) => {
+            .populate({
+               path: 'teas',
+               select: ['title', 'score', 'reviews', 'category'],
+               populate: {
+                 path: 'category',
+                 select: 'background'
+               }
+             })
+             .exec( (err, cat) => {
               res.send({ cat });
             });
   })
@@ -122,8 +130,26 @@ module.exports = app => {
     Tea.findOne({ _id: req.params.teaId })
        .populate({
          path: 'reviews',
+         options: {
+           sort: {
+             createdAt: -1
+           }
+         },
          populate: {
-           path: 'author'
+           path: 'author',
+           select: ['avatar', 'name']
+         }
+       })
+       .populate({
+         path: 'reviews',
+         options: {
+           sort: {
+             createdAt: -1
+           }
+         },
+         populate: {
+           path: 'image',
+           select: 'path'
          }
        })
        .populate('category')
@@ -134,9 +160,14 @@ module.exports = app => {
        })
        .exec( (err, tea) => {
           if (err) { throw err };
+          console.log(tea);
           res.send(tea);
         });
   });
+
+  // app.get('/api/teas/mostreviewed', (req, res) => {
+  //   Tea.find({}).sort({"answers":-1}).limit(10).pretty();
+  // });
 
   // app.post('/api/teas/collections', (req, res) => {
   //

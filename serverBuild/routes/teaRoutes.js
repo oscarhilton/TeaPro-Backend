@@ -32,7 +32,14 @@ module.exports = function (app) {
   });
 
   app.get('/api/category/:title', function (req, res) {
-    Category.findOne({ title: req.params.title }).populate('teas').exec(function (err, cat) {
+    Category.findOne({ title: req.params.title }).populate({
+      path: 'teas',
+      select: ['title', 'score', 'reviews', 'category'],
+      populate: {
+        path: 'category',
+        select: 'background'
+      }
+    }).exec(function (err, cat) {
       res.send({ cat: cat });
     });
   });
@@ -138,8 +145,25 @@ module.exports = function (app) {
   app.get('/api/teas/:teaId/display', function (req, res) {
     Tea.findOne({ _id: req.params.teaId }).populate({
       path: 'reviews',
+      options: {
+        sort: {
+          createdAt: -1
+        }
+      },
       populate: {
-        path: 'author'
+        path: 'author',
+        select: ['avatar', 'name']
+      }
+    }).populate({
+      path: 'reviews',
+      options: {
+        sort: {
+          createdAt: -1
+        }
+      },
+      populate: {
+        path: 'image',
+        select: 'path'
       }
     }).populate('category').populate('moods.mood').populate({
       path: 'userImages',
@@ -148,9 +172,14 @@ module.exports = function (app) {
       if (err) {
         throw err;
       };
+      console.log(tea);
       res.send(tea);
     });
   });
+
+  // app.get('/api/teas/mostreviewed', (req, res) => {
+  //   Tea.find({}).sort({"answers":-1}).limit(10).pretty();
+  // });
 
   // app.post('/api/teas/collections', (req, res) => {
   //

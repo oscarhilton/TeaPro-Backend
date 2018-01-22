@@ -11,10 +11,12 @@ const User = mongoose.model('User');
 //   })
 // })
 
+
 module.exports = app => {
   app.post('/api/teas/:teaId/reviews/add/:userId', (req, res) => {
+    console.log('NEW REVIEW START');
     Tea.findOne({ _id: req.params.teaId }, (err, tea) => {
-          const { newReview } = req.body;
+          const { newReview, imageUpload } = req.body;
           const { titleText, bodyText, starCount } = newReview;
           const newReviewEntry = new Review({
             title: titleText,
@@ -25,34 +27,43 @@ module.exports = app => {
             upvotes: 0,
             downvotes: 0,
             comments: [],
-            // TODO: NEED TO UPLOAD IMAGE WITH THE REVIEW <----- !!!!
-            tea
+            tea,
+            image: imageUpload
           });
-          newReviewEntry.save();
-          tea.reviews.push(newReviewEntry);
-          const score = tea.score ? tea.score : 0;
-          tea.score = score + starCount;
-          tea.save((err) => {
+          newReviewEntry.save((err) => {
             if (err) { throw err };
-            User.findOne({ _id: req.params.userId }, (err, user) => {
+            tea.reviews.push(newReviewEntry);
+            const score = tea.score ? tea.score : 0;
+            tea.score = score + starCount;
+            tea.save((err) => {
               if (err) { throw err };
-              if (user) {
-                user.reviews.push(newReviewEntry);
-                user.save();
-              }
-            })
-            tea.populate({
-              path: 'reviews',
-              populate: {
-                path: 'author'
-              }
-            }, (err) => {
-              // console.log(tea, 'TEAAAA');
-              res.send({ reviews: tea.reviews, score: tea.score });
+              User.findOne({ _id: req.params.userId }, (err, user) => {
+                if (err) { throw err };
+                if (user) {
+                  user.reviews.push(newReviewEntry);
+                  user.save((err) => {
+                    tea
+                    .populate({
+                      path: 'reviews',
+                      populate: {
+                        path: 'author'
+                      }
+                    })
+                    .populate({
+                      path: 'reviews',
+                      populate: {
+                        path: 'image'
+                      }
+                    })
+                    .sort({ createdAt: -1 }, (err) => {
+                      res.send({ reviews: tea.reviews, score: tea.score });
+                    });
+                  });
+                }
+              });
             });
           });
-          // console.log('NEW REVIEW ', newReviewEntry, ' TO THIS TEA ', tea, ' BY THIS USER', req.params.userId);
-    });
+        });
   });
 
   app.post('/api/reviews/:reviewId/upvote', (req, res) => {
@@ -67,7 +78,14 @@ module.exports = app => {
   });
 
   app.get('/api/teas/:teaId/reviews/all', (req, res) => {
-    Tea.findOne({ _id: req.params.teaId }).populate('reviews').exec( (err, tea) => {
+    console.log('REVIEWS CALLED');
+    Tea.findOne({ _id: req.params.teaId }).populate({
+      path: 'reviews',
+      populate: {
+        path: ['author', 'image']
+      }
+    }).exec( (err, tea) => {
+      console.log(tea.reviews);
       res.send(tea.reviews);
     });
   });

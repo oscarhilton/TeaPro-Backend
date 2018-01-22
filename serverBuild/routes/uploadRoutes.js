@@ -60,18 +60,52 @@ module.exports = function (app) {
     });
   });
 
+  app.post('/api/upload/userupload', function (req, res, next) {
+    imgurUpload(req, res, function (err) {
+      if (err) {
+        console.log(err, ' error uploading');
+        return res.end('Error uploading file.');
+      }
+      // console.log(req.file, '<<< file');
+      // console.log(req.body, '<<< body');
+      var _req$file2 = req.file,
+          originalname = _req$file2.originalname,
+          mimetype = _req$file2.mimetype;
+      var _req$file$data2 = req.file.data,
+          link = _req$file$data2.link,
+          size = _req$file$data2.size,
+          datetime = _req$file$data2.datetime;
+
+      var newUserFile = new Uploads({
+        title: originalname,
+        path: link,
+        type: mimetype,
+        size: size,
+        uploadDate: datetime,
+        approved: false,
+        author: req.body.userId
+      });
+      newUserFile.save(function (err) {
+        if (err) {
+          throw err;
+        }
+        res.send(newUserFile);
+      });
+    });
+  });
+
   app.post('/api/userupload/:userId/tea', function (req, res, next) {
     imgurUpload(req, res, function (err) {
       if (err) {
         console.log(err, ' error uploading');
         return res.end('Error uploading file.');
       }
-      var _req$file2 = req.file,
-          originalname = _req$file2.originalname,
-          mimetype = _req$file2.mimetype;
-      var _req$file$data2 = req.file.data,
-          link = _req$file$data2.link,
-          size = _req$file$data2.size;
+      var _req$file3 = req.file,
+          originalname = _req$file3.originalname,
+          mimetype = _req$file3.mimetype;
+      var _req$file$data3 = req.file.data,
+          link = _req$file$data3.link,
+          size = _req$file$data3.size;
       var _req$body = req.body,
           timestamp = _req$body.timestamp,
           latitude = _req$body.latitude,

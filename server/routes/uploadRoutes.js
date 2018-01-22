@@ -52,6 +52,34 @@ module.exports = app => {
   	});
   });
 
+  app.post('/api/upload/userupload', (req, res, next) => {
+    imgurUpload(req,res, (err) => {
+      if(err) {
+        console.log(err, ' error uploading');
+        return res.end('Error uploading file.');
+      }
+      // console.log(req.file, '<<< file');
+      // console.log(req.body, '<<< body');
+      const { originalname, mimetype } = req.file;
+      const { link, size, datetime } = req.file.data;
+      const newUserFile = new Uploads({
+        title: originalname,
+        path: link,
+        type: mimetype,
+        size,
+        uploadDate: datetime,
+        approved: false,
+        author: req.body.userId
+      });
+      newUserFile.save((err) => {
+        if (err) {
+          throw err;
+        }
+        res.send(newUserFile);
+      })
+    });
+  });
+
   app.post('/api/userupload/:userId/tea', (req, res, next) => {
     imgurUpload(req,res, (err) => {
       if(err) {

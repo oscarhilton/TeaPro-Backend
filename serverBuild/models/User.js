@@ -17,8 +17,8 @@ var userSchema = new Schema({
   avatar: String,
   cupboard: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'Tea' }],
-  chosenMoods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }],
-  chosenCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+  chosenMoods: [{ type: Schema.Types.ObjectId, ref: 'Moods' }], // Weight is scored by user interaction
+  chosenCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }], // TODO: Turn into object { cat: DBobject, weight: number }
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
   posts: [{ type: Schema.Types.ObjectId, ref: 'UserPost' }],
   images: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }],
@@ -26,6 +26,9 @@ var userSchema = new Schema({
   following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   profileBio: { type: String, default: '' }
 });
+
+// 1. New user -> Having a generic category / moods -> TeaPro orangised categories
+// 2. Onboard user -> OnBoarding categories / moods
 
 userSchema.statics.getCupboardTeas = function (text, cb) {
   console.log('hello!', text);

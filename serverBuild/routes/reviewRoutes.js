@@ -13,10 +13,14 @@ var User = mongoose.model('User');
 //   })
 // })
 
+
 module.exports = function (app) {
   app.post('/api/teas/:teaId/reviews/add/:userId', function (req, res) {
+    console.log('NEW REVIEW START');
     Tea.findOne({ _id: req.params.teaId }, function (err, tea) {
-      var newReview = req.body.newReview;
+      var _req$body = req.body,
+          newReview = _req$body.newReview,
+          imageUpload = _req$body.imageUpload;
       var titleText = newReview.titleText,
           bodyText = newReview.bodyText,
           starCount = newReview.starCount;
@@ -30,37 +34,45 @@ module.exports = function (app) {
         upvotes: 0,
         downvotes: 0,
         comments: [],
-        // TODO: NEED TO UPLOAD IMAGE WITH THE REVIEW <----- !!!!
-        tea: tea
+        tea: tea,
+        image: imageUpload
       });
-      newReviewEntry.save();
-      tea.reviews.push(newReviewEntry);
-      var score = tea.score ? tea.score : 0;
-      tea.score = score + starCount;
-      tea.save(function (err) {
+      newReviewEntry.save(function (err) {
         if (err) {
           throw err;
         };
-        User.findOne({ _id: req.params.userId }, function (err, user) {
+        tea.reviews.push(newReviewEntry);
+        var score = tea.score ? tea.score : 0;
+        tea.score = score + starCount;
+        tea.save(function (err) {
           if (err) {
             throw err;
           };
-          if (user) {
-            user.reviews.push(newReviewEntry);
-            user.save();
-          }
-        });
-        tea.populate({
-          path: 'reviews',
-          populate: {
-            path: 'author'
-          }
-        }, function (err) {
-          // console.log(tea, 'TEAAAA');
-          res.send({ reviews: tea.reviews, score: tea.score });
+          User.findOne({ _id: req.params.userId }, function (err, user) {
+            if (err) {
+              throw err;
+            };
+            if (user) {
+              user.reviews.push(newReviewEntry);
+              user.save(function (err) {
+                tea.populate({
+                  path: 'reviews',
+                  populate: {
+                    path: 'author'
+                  }
+                }).populate({
+                  path: 'reviews',
+                  populate: {
+                    path: 'image'
+                  }
+                }).sort({ createdAt: -1 }, function (err) {
+                  res.send({ reviews: tea.reviews, score: tea.score });
+                });
+              });
+            }
+          });
         });
       });
-      // console.log('NEW REVIEW ', newReviewEntry, ' TO THIS TEA ', tea, ' BY THIS USER', req.params.userId);
     });
   });
 
@@ -76,7 +88,14 @@ module.exports = function (app) {
   });
 
   app.get('/api/teas/:teaId/reviews/all', function (req, res) {
-    Tea.findOne({ _id: req.params.teaId }).populate('reviews').exec(function (err, tea) {
+    console.log('REVIEWS CALLED');
+    Tea.findOne({ _id: req.params.teaId }).populate({
+      path: 'reviews',
+      populate: {
+        path: ['author', 'image']
+      }
+    }).exec(function (err, tea) {
+      console.log(tea.reviews);
       res.send(tea.reviews);
     });
   });

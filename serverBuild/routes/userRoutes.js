@@ -42,39 +42,42 @@ module.exports = function (app) {
   });
 
   app.post('/api/user/:user/cupboard/add/:teaId', function (req, res) {
-    User.findOne({ _id: req.params.user }, function (err, user) {
-      if (err) {
-        throw err;
-      };
-      if (user) {
-        if (user.cupboard.indexOf(req.params.teaId) > -1) {
-          res.send('Already got one');
-        } else {
-          Tea.findOne({ _id: req.params.teaId }, function (err, tea) {
-            if (err) {
-              throw err;
-            };
-            user.cupboard.push(tea);
-            user.save(function (err) {
-              if (!err) {
-                var note = new Notification({
-                  message: 'You added ' + req.body.teaTitle + ' to your cupboard',
-                  timestamp: new Date(),
-                  reference: tea._id,
-                  user: user._id
-                });
-                note.save(function (err) {
-                  if (!err) {
-                    console.log(note);
-                    res.send(note);
-                  }
-                });
-              }
-            });
-          });
-        }
-      };
-    });
+    console.log('hello');
+    // User.findOne({ _id: mongoose.Types.ObjectId(req.params.user)}, (err, user) => {
+    //   if (err) { throw err };
+    //   console.log(user);
+    //   // if (user) {
+    //   //   if (user.cupboard.indexOf(req.params.teaId) > -1) {
+    //   //     res.send('Already got one');
+    //   //   } else {
+    //   //     Tea.findOne({ _id: req.params.teaId }, (err, tea) => {
+    //   //       if (err) { throw err };
+    //   //       if (tea) {
+    //   //         user.cupboard.push(tea);
+    //   //         user.save((err) => {
+    //   //           console.log(user._id);
+    //   //           if (!err) {
+    //   //             const note = new Notification({
+    //   //               message: `You added ${req.body.teaTitle} to your cupboard`,
+    //   //               timestamp: new Date(),
+    //   //               reference: tea._id,
+    //   //               // user: user._id
+    //   //             });
+    //   //             note.save((err) => {
+    //   //               if (!err) {
+    //   //                 console.log(note);
+    //   //                 res.send(note);
+    //   //               }
+    //   //             });
+    //   //           }
+    //   //         });
+    //   //       } else {
+    //   //         throw('no tea found of that ID.');
+    //   //       }
+    //   //     });
+    //   //   }
+    //   // };
+    // })
   });
 
   app.get('/api/user/:user/onboardstatus', function (req, res) {
