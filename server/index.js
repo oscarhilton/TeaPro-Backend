@@ -11,6 +11,7 @@ const keys = require('./config/keys');
 // Mongoose models
 require('./models/User');
 require('./models/Tea');
+require('./models/Brands');
 require('./models/Category');
 require('./models/Reviews');
 require('./models/UserPosts');
@@ -26,9 +27,6 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-
-
-// const populate = require('./populate');
 
 app.use(
   cookieSession({

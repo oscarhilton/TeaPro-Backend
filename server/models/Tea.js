@@ -17,8 +17,9 @@ const teaSchema = new Schema({
     }
   ],
   health: [{ type: Schema.Types.ObjectId, ref: 'Health' }],
-  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
-  userImages: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }]
+  // reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }], TODO: MOVE REVIEWS TO BRANDS
+  userImages: [{ type: Schema.Types.ObjectId, ref: 'Uploads' }],
+  brands: { type: Schema.Types.ObjectId, ref: 'Brands' },
 });
 
 teaSchema.index({title: 'text', description: 'text', category: 'text'});
@@ -28,16 +29,5 @@ teaSchema.statics.getReviewTotal = function(_id, cb) {
     cb(tea['reviews'].length);
   });
 }
-
-// teaSchema.virtual('rating').get(function() {
-//   const numberOfReviews = this.reviews.length;
-//   let ratings = [];
-//   for (var i = 0; i < numberOfReviews; i++) {
-//     ratings.push(this.reviews[i].rating);
-//   };
-//   const sum = ratings.reduce((a, b) => a + b, 0);
-//   const average = sum / numberOfReviews;
-//   return Math.round(average * 10) / 10;
-// });
 
 mongoose.model('Tea', teaSchema);
